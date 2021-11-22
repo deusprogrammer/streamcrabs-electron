@@ -1,0 +1,45 @@
+{
+     "enabled": {
+          "requests": true
+     },
+     "videoPool": [],
+     "audioPool": [],
+     "alertConfigs": {
+          "raidAlert": {
+               "enabled": false,
+               "type": "VIDEO",
+               "name": null,
+               "messageTemplate": null,
+               "id": null
+          },
+          "subAlert": {
+               "enabled": false,
+               "type": "VIDEO",
+               "name": null,
+               "messageTemplate": null,
+               "id": null
+          },
+          "cheerAlert": {
+               "enabled": false,
+               "type": "VIDEO",
+               "name": null,
+               "messageTemplate": null,
+               "id": null
+          },
+          "followAlert": {
+               "enabled": false,
+               "type": "VIDEO",
+               "name": null,
+               "messageTemplate": null,
+               "id": null
+          }
+     },
+     "commands": {},
+     "dynamicAlerts": [],
+     "clientId": null,
+     "clientSecret": null,
+     "accessToken": null,
+     "refreshToken": null,
+     "twitchChannel": null,
+     "profileImage": null
+}

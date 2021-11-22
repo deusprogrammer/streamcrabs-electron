@@ -1,0 +1,6 @@
+node_modules/
+build/
+electron/config.json
+electron/media/*.mp3
+electron/media/*.mp4
+electron/media/*.png
