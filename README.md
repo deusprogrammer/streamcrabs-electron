@@ -39,3 +39,7 @@ Install and run electron-packager on the root of the project.
 If you want to build for all platforms use the following.
 
     npx electron-packager . --overwrite --all
+    
+## Considerations
+
+This app will require port 8080 and 8081 open for communication between the bot and your overlays.  In later versions it will be changed to use whatever is available.
