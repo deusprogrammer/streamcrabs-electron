@@ -116,7 +116,7 @@ const getTwitchUser = async (username, accessToken) => {
     let [{login, profile_image_url}] = (await axios.get(url, {
         headers: {
             "authorization": `Bearer ${accessToken}`,
-            "client-id": CLIENT_ID
+            "client-id": config.clientId
         }
     })).data.data;
 
