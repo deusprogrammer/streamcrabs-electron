@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld(
                 "getUiLock",
                 "startBot", 
                 "stopBot", 
+                "getBotRunning",
                 "restartBot",
                 "login",
                 "storeMedia",

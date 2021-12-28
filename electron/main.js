@@ -22,6 +22,7 @@ try {
 
 let config = JSON.parse(fs.readFileSync(CONFIG_FILE).toString());
 let userData = JSON.parse(fs.readFileSync(USER_DATA_FILE).toString());
+let botRunning = false;
 let uiLocked = false;
 
 const uuidv4 = () => {
@@ -259,4 +260,8 @@ ipcMain.handle('removeCommand', (event, key) => {
 
 ipcMain.handle('getBotConfig', () => {
     return config;
+});
+
+ipcMain.handle('getBotRunning', () => {
+    return botRunning;
 });

@@ -1,7 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
-const Home = (props) => {
+const Home = () => {
     const [botStarted, setBotStarted] = useState(false);
+
+    useEffect(() => {
+        (async () => {
+            let botStarted = await window.api.send("getBotRunning");
+            setBotStarted(botStarted);
+        })();
+    }, []);
 
     const startBot = () => {
         window.api.send(`startBot`);
