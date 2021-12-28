@@ -3,9 +3,11 @@ import {Link} from 'react-router-dom';
 
 const DynamicAlertManager = () => {
     let [dynamicAlerts, setDynamicAlerts] = useState([]);
-    useEffect(async () => {
-        let {dynamicAlerts} = await window.api.send("getBotConfig");
-        setDynamicAlerts(dynamicAlerts);
+    useEffect(() => {
+        (async () => {
+            let {dynamicAlerts} = await window.api.send("getBotConfig");
+            setDynamicAlerts(dynamicAlerts);
+        })()
     }, []);
 
     return (

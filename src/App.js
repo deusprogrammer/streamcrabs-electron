@@ -25,13 +25,15 @@ const App = () => {
     const [twitchChannel, setTwitchChannel] = useState();
     const [clientId, setClientId] = useState(null);
     const [clientSecret, setClientSecret] = useState(null);
-    useEffect(async () => {
-        let {accessToken, refreshToken, profileImage, twitchChannel, clientId, clientSecret} = await window.api.send("getBotConfig");
-        setLoggedIn(accessToken && refreshToken);
-        setTwitchChannel(twitchChannel);
-        setProfileImage(profileImage);
-        setClientId(clientId);
-        setClientSecret(clientSecret);
+    useEffect(() => {
+        (async () => {
+            let {accessToken, refreshToken, profileImage, twitchChannel, clientId, clientSecret} = await window.api.send("getBotConfig");
+            setLoggedIn(accessToken && refreshToken);
+            setTwitchChannel(twitchChannel);
+            setProfileImage(profileImage);
+            setClientId(clientId);
+            setClientSecret(clientSecret);
+        })();
     }, []);
 
     const onLogin = async () => {

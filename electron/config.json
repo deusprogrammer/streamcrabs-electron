@@ -2,44 +2,191 @@
      "enabled": {
           "requests": true
      },
-     "videoPool": [],
-     "audioPool": [],
+     "videoPool": [
+          {
+               "id": 1637780141,
+               "name": "Cheerleader",
+               "url": "/media/1637736315581.mp4",
+               "volume": 1,
+               "chromaKey": "green",
+               "enabled": true
+          },
+          {
+               "id": 1637780150,
+               "name": "Shrek",
+               "url": "/media/1637736327343.mp4",
+               "volume": 1,
+               "chromaKey": "blue",
+               "enabled": true
+          }
+     ],
+     "audioPool": [
+          {
+               "id": 1637780187,
+               "name": "Inception Farts",
+               "url": "/media/1637736293247.mp3",
+               "volume": 1,
+               "enabled": true
+          },
+          {
+               "id": 1637780197,
+               "name": "Here to Shit Ass",
+               "url": "/media/1637736303900.mp3",
+               "volume": 1,
+               "enabled": true
+          },
+          {
+               "id": 1637780893,
+               "name": "Groovy",
+               "url": "/media/1637780816825.mp3",
+               "volume": 1,
+               "enabled": true
+          },
+          {
+               "id": 1637781092,
+               "name": "Yoshi Tongues My Asshole",
+               "url": "/media/1637781001639.mp3",
+               "volume": 1,
+               "enabled": true
+          },
+          {
+               "id": 1637781141300,
+               "enabled": true,
+               "name": "Suck My Dick Through a Straw",
+               "url": "/media/1637781141293.mp3",
+               "volume": 1
+          }
+     ],
+     "raidConfig": {
+          "theme": "YOSHI"
+     },
      "alertConfigs": {
           "raidAlert": {
-               "enabled": false,
-               "type": "VIDEO",
-               "name": null,
-               "messageTemplate": null,
-               "id": null
+               "enabled": true,
+               "type": "DYNAMIC",
+               "name": "YOSHI",
+               "messageTemplate": "${raider} is raiding with ${viewers} viewers",
+               "id": 1637778194477
           },
           "subAlert": {
-               "enabled": false,
+               "enabled": true,
                "type": "VIDEO",
                "name": null,
-               "messageTemplate": null,
-               "id": null
+               "messageTemplate": "${username} has subscribed at ${subTier}",
+               "id": 1637780141
           },
           "cheerAlert": {
-               "enabled": false,
+               "enabled": true,
                "type": "VIDEO",
                "name": null,
-               "messageTemplate": null,
-               "id": null
+               "messageTemplate": "${username} cheered ${bits} bits",
+               "id": 1637780141
           },
           "followAlert": {
-               "enabled": false,
+               "enabled": true,
                "type": "VIDEO",
                "name": null,
-               "messageTemplate": null,
-               "id": null
+               "messageTemplate": "${username} has followed",
+               "id": 1637780150
           }
      },
-     "commands": {},
-     "dynamicAlerts": [],
-     "clientId": null,
-     "clientSecret": null,
-     "accessToken": null,
-     "refreshToken": null,
-     "twitchChannel": null,
-     "profileImage": null
+     "commands": {
+          "!fart": {
+               "coolDown": "10m",
+               "type": "AUDIO",
+               "target": 1637780187
+          },
+          "!cheerleader": {
+               "coolDown": "10m",
+               "type": "VIDEO",
+               "target": 1637780141
+          },
+          "!shrek": {
+               "coolDown": "10m",
+               "type": "VIDEO",
+               "target": 1637780150
+          },
+          "!shit": {
+               "coolDown": "10m",
+               "type": "AUDIO",
+               "target": 1637780197
+          }
+     },
+     "dynamicAlerts": [
+          {
+               "id": 1637778194477,
+               "name": "Yoshi",
+               "message": "Incoming raid of size ${raidSize} from ${raider}",
+               "sprites": [
+                    {
+                         "file": "/media/1637778194466.png",
+                         "startFrame": 0,
+                         "endFrame": 9,
+                         "frameWidth": 128,
+                         "frameHeight": 128,
+                         "frameRate": 15,
+                         "cellCount": 10
+                    },
+                    {
+                         "file": "/media/1637778194473.png",
+                         "startFrame": 0,
+                         "endFrame": 9,
+                         "frameWidth": 128,
+                         "frameHeight": 128,
+                         "frameRate": 15,
+                         "cellCount": 10
+                    },
+                    {
+                         "file": "/media/1637778194474.png",
+                         "startFrame": 0,
+                         "endFrame": 9,
+                         "frameWidth": 128,
+                         "frameHeight": 128,
+                         "frameRate": 15,
+                         "cellCount": 10
+                    },
+                    {
+                         "file": "/media/1637778194474.png",
+                         "startFrame": 0,
+                         "endFrame": 9,
+                         "frameWidth": 128,
+                         "frameHeight": 128,
+                         "frameRate": 15,
+                         "cellCount": 10
+                    },
+                    {
+                         "file": "/media/1637778194475.png",
+                         "startFrame": 0,
+                         "endFrame": 9,
+                         "frameWidth": 128,
+                         "frameHeight": 128,
+                         "frameRate": 15,
+                         "cellCount": 10
+                    },
+                    {
+                         "file": "/media/1637778194475.png",
+                         "startFrame": 0,
+                         "endFrame": 9,
+                         "frameWidth": 128,
+                         "frameHeight": 128,
+                         "frameRate": 15,
+                         "cellCount": 10
+                    }
+               ],
+               "music": {
+                    "file": "/media/1637778194476.mp3",
+                    "volume": 1
+               },
+               "leavingSound": {
+                    "file": "/media/1637778194477.mp3",
+                    "volume": 1
+               }
+          }
+     ],
+     "clientId": "uczfktv6o7vvdeqxnafizuq672r5od",
+     "clientSecret": "o0a0kna2jp9v0c67xsrceye9l9dyun",
+     "twitchChannel": "thetruekingofspace",
+     "profileImage": "https://static-cdn.jtvnw.net/jtv_user_pictures/7d4a88a0-259f-4829-ba51-b7f661aacab8-profile_image-300x300.png",
+     "accessToken": "ctlwqb4bj7wka3hjie3gl1va9cyspg",
+     "refreshToken": "aq2tkd8lxj38dr9afgvwi2kzshcvtcprn3m3uke3w7i7ag7kl1"
 }

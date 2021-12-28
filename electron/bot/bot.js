@@ -106,11 +106,17 @@ const startBot = async (botConfig) => {
 
             // Remove whitespace from chat message
             const command = msg.trim();
+            const [commandName, ...text] = command.split(" ");
+            const tokens = command.split(" ");
+
+            const commandText = text.join(" ");
 
             // Handle battle commands here
             if (command.startsWith("!")) {
                 context.command = command;
-                context.tokens = command.split(" ");
+                context.commandName = commandName;
+                context.text = commandText;
+                context.tokens = tokens;
                 context.caller = caller;
                 context.target = target;
 
@@ -197,7 +203,6 @@ const startBot = async (botConfig) => {
 
         const onRedemption = async (redemptionMessage) => {
             try {
-
                 // Run through redemption plugin hooks
                 for (let plugin of plugins) {
                     if (plugin.redemptionHook) {

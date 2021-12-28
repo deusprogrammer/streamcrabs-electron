@@ -34,33 +34,35 @@ const DynamicAlertCustomizer = (props) => {
     const {id} = useParams();
     const navigate = useNavigate();
 
-    useEffect(async () => {
-        if (id) {
-            let {dynamicAlerts} = await window.api.send("getBotConfig");
-            let dynamicAlert = dynamicAlerts.find((dynamicAlert) => {
-                return dynamicAlert.id === parseInt(id);
-            });
-
-            if (!dynamicAlert) {
-                return;
+    useEffect(() => {
+        (async () => {
+            if (id) {
+                let {dynamicAlerts} = await window.api.send("getBotConfig");
+                let dynamicAlert = dynamicAlerts.find((dynamicAlert) => {
+                    return dynamicAlert.id === parseInt(id);
+                });
+    
+                if (!dynamicAlert) {
+                    return;
+                }
+    
+                dynamicAlert.sprites.forEach((sprite) => {
+                    sprite.isStored = true;
+                    sprite.frames = sprite.cellCount;
+                    sprite.endFrame -= 1;
+                });
+    
+                dynamicAlert.music.isStored = true;
+                dynamicAlert.leavingSound.isStored = true;
+    
+                setName(dynamicAlert.name);
+                setMessage(dynamicAlert.message);
+                setSprites(dynamicAlert.sprites);
+                setBGM(dynamicAlert.music);
+                setSFX(dynamicAlert.leavingSound);
+                setIsEdit(true);
             }
-
-            dynamicAlert.sprites.forEach((sprite) => {
-                sprite.isStored = true;
-                sprite.frames = sprite.cellCount;
-                sprite.endFrame -= 1;
-            });
-
-            dynamicAlert.music.isStored = true;
-            dynamicAlert.leavingSound.isStored = true;
-
-            setName(dynamicAlert.name);
-            setMessage(dynamicAlert.message);
-            setSprites(dynamicAlert.sprites);
-            setBGM(dynamicAlert.music);
-            setSFX(dynamicAlert.leavingSound);
-            setIsEdit(true);
-        }
+        })();
     }, []);
 
     const removeSprite = async (index) => {

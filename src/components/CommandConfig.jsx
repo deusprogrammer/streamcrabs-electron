@@ -4,10 +4,12 @@ const CommandConfig = (props) => {
     const [botConfig, setBotConfig] = useState({videoPool: [], audioPool: []});
     const [commands, setCommands] = useState({});
     const [newCommand, setNewCommand] = useState({key: "", coolDown: "", type: "VIDEO", target: ""});
-    useEffect(async () => {
-        let botConfig = await window.api.send("getBotConfig");
-        setBotConfig(botConfig);
-        setCommands(botConfig.commands);
+    useEffect(() => {
+        (async () => {
+            let botConfig = await window.api.send("getBotConfig");
+            setBotConfig(botConfig);
+            setCommands(botConfig.commands);
+        })()
     }, []);
 
     const updateCommand = (key, field, value) => {

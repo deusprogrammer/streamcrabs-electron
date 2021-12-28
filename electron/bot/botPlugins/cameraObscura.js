@@ -149,8 +149,6 @@ exports.redemptionHook = async ({rewardTitle, userName, userId, message}, botCon
             type: "AUDIO",
             targets: ["panel"],
             eventData: {
-                requester: userName,
-                message: [mediaName, userName],
                 mediaName,
                 url,
                 volume,
@@ -163,14 +161,12 @@ exports.redemptionHook = async ({rewardTitle, userName, userId, message}, botCon
             return;
         }
 
-        // let botConfig = await Xhr.getBotConfig(TWITCH_EXT_CHANNEL_ID);
-        let botConfig = {};
+        let botConfig = botContext.botConfig;
         let enabledVideos = botConfig.videoPool.filter((element) => {
-            return !element.url.startsWith("*");
+            return element.enabled;
         })
         let n = Math.floor((Math.random() * enabledVideos.length));
         let url = enabledVideos[n].url;
-        let mediaName = enabledVideos[n].name;
         let chromaKey = enabledVideos[n].chromaKey;
         let volume = enabledVideos[n].volume;
 
@@ -182,9 +178,6 @@ exports.redemptionHook = async ({rewardTitle, userName, userId, message}, botCon
             type: "VIDEO",
             targets: ["panel"],
             eventData: {
-                requester: userName,
-                message: [mediaName, userName],
-                mediaName,
                 url,
                 chromaKey,
                 volume,
@@ -201,8 +194,6 @@ exports.redemptionHook = async ({rewardTitle, userName, userId, message}, botCon
             type: "BIRDUP",
             targets: ["panel"],
             eventData: {
-                requester: userName,
-                message: ["Bird Up", userName],
                 results: {}
             }
         });
@@ -216,8 +207,6 @@ exports.redemptionHook = async ({rewardTitle, userName, userId, message}, botCon
             type: "BADAPPLE",
             targets: ["panel"],
             eventData: {
-                requester: userName,
-                message: ["Bad Apple", userName],
                 results: {}
             }
         });

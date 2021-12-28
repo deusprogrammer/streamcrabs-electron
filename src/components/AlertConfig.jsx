@@ -108,9 +108,11 @@ const AlertConfigElement = (props) => {
 
 const AlertConfig = (props) => {
     const [botConfig, setBotConfig] = useState({alertConfigs: {cheerAlert: {}, subAlert: {}, raidAlert: {}, followAlert:{}}});
-    useEffect(async () => {
-        let botConfig = await window.api.send("getBotConfig");
-        setBotConfig(botConfig);
+    useEffect(() => {
+        (async () => {
+            let botConfig = await window.api.send("getBotConfig");
+            setBotConfig(botConfig);
+        })();
     }, []);
 
     return (
