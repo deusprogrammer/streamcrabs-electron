@@ -160,7 +160,7 @@ const startBot = async (botConfig) => {
             await EventQueue.startEventListener(botContext);
 
             // Announce restart
-            EventQueue.sendInfoToChat(`Twitch Dungeon version ${versionNumber} is online.  All systems nominal.`);
+            EventQueue.sendInfoToChat(`Streamcrabs version ${versionNumber} is online.  All systems nominal.`);
         }
         
         const onRaid = async (channel, username, viewers) => {
