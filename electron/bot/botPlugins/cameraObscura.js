@@ -377,7 +377,7 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
         }
 
         EventQueue.sendEventToOverlays("VIDEO", {
-            url: "/util/twitch-tools/videos/badapple.mp4",
+            url: "/videos/badapple.mp4",
             chromaKey: "black",
             volume: "0.8",
             subPanel: "default"
@@ -393,7 +393,7 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
 
         EventQueue.sendEventToOverlays("VIDEO", {
             message: `${userName} is a big shot for the week!`,
-            url: "/util/twitch-tools/videos/bigshot.mp4",
+            url: "/videos/bigshot.mp4",
             chromaKey: null,
             volume: "0.8",
             subPanel: "default"
