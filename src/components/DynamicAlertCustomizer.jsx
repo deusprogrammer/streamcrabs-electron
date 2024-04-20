@@ -1,11 +1,13 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router';
 import Animation from '../elements/Animation';
-import { createAbsoluteUrl } from '../utils/UrlUtil';
+
+import SpriteStrip from '../elements/SpriteStrip';
+
+import { getDynamicAlert, storeDynamicAlert, storeMedia, updateDynamicAlert } from '../api/StreamCrabsApi';
+import { useNavigate, useParams } from 'react-router';
 
 const readFileAsDataUri = (file) => {
-    return new Promise(function(resolve,reject) {
+    return new Promise(function(resolve,reject){
         let fr = new FileReader();
 
         fr.onload = function(){
@@ -20,49 +22,52 @@ const readFileAsDataUri = (file) => {
     });
 }
 
-const DynamicAlertCustomizer = (props) => {
+let variantMap = {
+    "CHARGE_RIGHT": "Charge Right",
+    "CHARGE_LEFT": "Charge Left",
+    "CHARGE_UP": "Charge Up",
+    "CHARGE_DOWN": "Charge Down"
+}
+
+const RaidAlertCustomizer = (props) => {
     const [sprites, setSprites] = useState([]);
     const [sfx, setSFX] = useState({});
     const [bgm, setBGM] = useState({});
+    const [sfxVolume, setSFXVolume] = useState(1.0);
+    const [bgmVolume, setBGMVolume] = useState(1.0);
     const [name, setName] = useState("Sprite");
     const [message, setMessage] = useState("Incoming raid of size ${raidSize} from ${raider}");
+    const [variant, setVariant] = useState("CHARGE_RIGHT");
     const [saving, setSaving] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
     const fileInput = useRef();
     const bgmFileInput = useRef();
     const sfxFileInput = useRef();
     const {id} = useParams();
     const navigate = useNavigate();
 
+    let getAlert = async () => {
+        if (id) {
+            let dynamicAlert = await getDynamicAlert(id);
+
+            dynamicAlert.sprites.forEach((sprite) => {
+                sprite.isStored = true;
+                sprite.frames = sprite.cellCount;
+            });
+
+            dynamicAlert.music.isStored = true;
+            dynamicAlert.leavingSound.isStored = true;
+
+            setName(dynamicAlert.name);
+            setVariant(dynamicAlert.variant);
+            setMessage(dynamicAlert.message);
+            setSprites(dynamicAlert.sprites);
+            setBGM(dynamicAlert.music);
+            setSFX(dynamicAlert.leavingSound);
+        }
+    }
+
     useEffect(() => {
-        (async () => {
-            if (id) {
-                let {dynamicAlerts} = await window.api.send("getBotConfig");
-                let dynamicAlert = dynamicAlerts.find((dynamicAlert) => {
-                    return dynamicAlert.id === parseInt(id);
-                });
-    
-                if (!dynamicAlert) {
-                    return;
-                }
-    
-                dynamicAlert.sprites.forEach((sprite) => {
-                    sprite.isStored = true;
-                    sprite.frames = sprite.cellCount;
-                    sprite.endFrame -= 1;
-                });
-    
-                dynamicAlert.music.isStored = true;
-                dynamicAlert.leavingSound.isStored = true;
-    
-                setName(dynamicAlert.name);
-                setMessage(dynamicAlert.message);
-                setSprites(dynamicAlert.sprites);
-                setBGM(dynamicAlert.music);
-                setSFX(dynamicAlert.leavingSound);
-                setIsEdit(true);
-            }
-        })();
+        getAlert();
     }, []);
 
     const removeSprite = async (index) => {
@@ -71,34 +76,49 @@ const DynamicAlertCustomizer = (props) => {
         setSprites(temp);
     };
 
-    const storeAudio = async (imagePayload) => {
-        return await window.api.send("storeMedia", {imagePayload, extension: ".mp3"});
+    const storeAudio = async (imagePayload, title) => {
+        let mediaData = {
+            mimeType: "audio/mp3",
+            extension: ".mp3",
+            imagePayload,
+            title
+        };
+
+        return await storeMedia(mediaData);
     };
 
-    const storeImage = async (imagePayload) => {
-        return await window.api.send("storeMedia", {imagePayload, extension: ".png"});
+    const storeImage = async (imagePayload, title) => {
+        let mediaData = {
+            mimeType: "image/png",
+            extension: ".png",
+            imagePayload,
+            title
+        };
+
+        return await storeMedia(mediaData);
     };
 
-    const storeDynamicAlert = async () => {
+    const store = async () => {
         for (let sprite of sprites) {
             if (!sprite.isStored) {
-                sprite.file = await storeImage(sprite.file.substring(sprite.file.indexOf(',') + 1));
+                sprite.file = await storeImage(sprite.file.substring(sprite.file.indexOf(',') + 1), "Raid-Sprite");
             }
         }
 
         let bgmFile = bgm.file;
         if (!bgm.isStored) {
-            bgmFile = await storeAudio(bgm.file.substring(bgm.file.indexOf(',') + 1));
+            bgmFile = await storeAudio(bgm.file.substring(bgm.file.indexOf(',') + 1), "Raid-BGM");
         }
 
         let sfxFile = sfx.file;
         if (!sfx.isStored) {
-            sfxFile = await storeAudio(sfx.file.substring(sfx.file.indexOf(',') + 1));
+            sfxFile = await storeAudio(sfx.file.substring(sfx.file.indexOf(',') + 1), "Raid-SFX");
         }
 
         let config = {
-            id: isEdit ? props.match.params.id : null,
+            twitchChannel: props.channel,
             name,
+            variant,
             message,
             sprites: sprites.map((sprite) => {
                 return {
@@ -113,16 +133,21 @@ const DynamicAlertCustomizer = (props) => {
             }),
             music: {
                 file: bgmFile,
-                volume: 1
+                volume: bgmVolume
             },
             leavingSound: {
                 file: sfxFile,
-                volume: 1
+                volume: sfxVolume
             }
         };
 
-        let id = await window.api.send("saveDynamicAlert", config);
-        return id;
+        console.log("CONFIG: " + JSON.stringify(config, null, 5));
+
+        if (id) {
+            return await updateDynamicAlert(id, config);
+        } else {
+            return await storeDynamicAlert(config);
+        }
     };
 
     return (
@@ -148,16 +173,22 @@ const DynamicAlertCustomizer = (props) => {
                             </td>
                         </tr>
                         <tr>
-                            <td>Message Template:</td>
+                            <td>Variant:</td>
                             <td>
-                                <input 
-                                    type="text" 
+                                <select
                                     style={{width: "400px"}}
-                                    value={message}
+                                    value={variant}
                                     disabled={saving}
                                     onChange={(e) => {
-                                        setMessage(e.target.value);
-                                    }} />
+                                        setVariant(e.target.value);
+                                    }}>
+                                        {Object.keys(variantMap).map((key) => {
+                                            let variantName = variantMap[key];
+                                            return (
+                                                <option value={key}>{variantName}</option>
+                                            )
+                                        })}
+                                </select>
                             </td>
                         </tr>
                     </tbody>
@@ -171,19 +202,44 @@ const DynamicAlertCustomizer = (props) => {
                         <div key={`sprite-${index}`} style={{border: "1px solid black"}}>
                             <h3>Sprite {index}</h3>
                             <div style={{marginLeft: "10px"}}>
-                                <Animation 
-                                    url={sprite.file}
-                                    frameCount={sprite.frames}
-                                    speed={sprite.frameRate}
-                                    startFrame={sprite.startFrame}
-                                    endFrame={sprite.endFrame}
-                                    onLoaded={(frameWidth, frameHeight) => {
-                                        const temp = [...sprites];
-                                        sprite.frameWidth = Math.floor(frameWidth);
-                                        sprite.frameHeight = Math.floor(frameHeight);
-                                        temp[index] = sprite;
-                                        setSprites(temp);
-                                    }} />
+                                <div style={{width: "100%", overflowX: "scroll"}}>
+                                    <Animation 
+                                        url={sprite.file}
+                                        frameCount={sprite.frames}
+                                        speed={sprite.frameRate}
+                                        startFrame={sprite.startFrame}
+                                        endFrame={sprite.endFrame}
+                                        onLoaded={(frameWidth, frameHeight) => {
+                                            const temp = [...sprites];
+                                            sprite.frameWidth = Math.floor(frameWidth);
+                                            sprite.frameHeight = Math.floor(frameHeight);
+                                            temp[index] = sprite;
+                                            setSprites(temp);
+                                        }} />
+                                </div>
+                                <div style={{width: "100%", backgroundColor: "white", overflowX: "scroll", whiteSpace: "nowrap"}}>
+                                    <SpriteStrip
+                                        url={sprite.file}
+                                        frameCount={sprite.frames}
+                                        startFrame={sprite.startFrame}
+                                        endFrame={sprite.endFrame} 
+                                        onStartFrameClick={(frame) => {
+                                            if (frame < sprite.endFrame) {
+                                                const temp = [...sprites];
+                                                sprite.startFrame = frame;
+                                                temp[index] = sprite;
+                                                setSprites(temp);
+                                            }
+                                        }}
+                                        onEndFrameClick={(frame) => {
+                                            if (sprite.startFrame < frame) {
+                                                const temp = [...sprites];
+                                                sprite.endFrame = frame;
+                                                temp[index] = sprite;
+                                                setSprites(temp);
+                                            }
+                                        }} />
+                                </div>
                                 <table>
                                     <tbody>
                                         <tr>
@@ -311,10 +367,17 @@ const DynamicAlertCustomizer = (props) => {
                                     });
                                     fr.readAsDataURL(f);
                                 }}/>
+                            <input 
+                                type="range" 
+                                min={0} 
+                                max={1} 
+                                step={0.1} 
+                                value={bgmVolume} 
+                                onChange={(e) => {setBGMVolume(parseFloat(e.target.value))}} />
                         </td>
                         <td style={{verticalAlign: "middle"}}>
                             <audio 
-                                src={createAbsoluteUrl(bgm.file)}
+                                src={bgm.file}
                                 width="300px" 
                                 controls  />
                         </td>
@@ -335,9 +398,16 @@ const DynamicAlertCustomizer = (props) => {
                                     });
                                     fr.readAsDataURL(f);
                                 }}/>
+                            <input 
+                                type="range" 
+                                min={0} 
+                                max={1} 
+                                step={0.1} 
+                                value={sfxVolume} 
+                                onChange={(e) => {setSFXVolume(parseFloat(e.target.value))}} />
                         </td><td style={{verticalAlign: "middle"}}>
                             <audio 
-                                src={createAbsoluteUrl(sfx.file)} 
+                                src={sfx.file} 
                                 width="300px" 
                                 controls />
                         </td>
@@ -349,14 +419,14 @@ const DynamicAlertCustomizer = (props) => {
                 disabled={!name || !message || !sfx.file || !bgm.file || sprites.length <= 0 || saving}
                 onClick={async () => {
                     setSaving(true);
-                    let id = await storeDynamicAlert();
-                    navigate("/");
+                    await store();
                     setSaving(false);
-                }}>
-                { isEdit ? "Update" : "Create" }
+                    navigate("/configs/dynamic-alerts");
+            }}>
+                { id ? "Update" : "Create" }
             </button>
         </div>
     )
 };
 
-export default DynamicAlertCustomizer;
+export default RaidAlertCustomizer;

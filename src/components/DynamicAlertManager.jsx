@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
+import { getBotConfig } from '../api/StreamCrabsApi';
 
-const DynamicAlertManager = () => {
+const RaidAlertManager = (props) => {
     let [dynamicAlerts, setDynamicAlerts] = useState([]);
+
     useEffect(() => {
         (async () => {
-            let {dynamicAlerts} = await window.api.send("getBotConfig");
+            let {dynamicAlerts} = await getBotConfig();
             setDynamicAlerts(dynamicAlerts);
         })()
     }, []);
@@ -13,28 +15,24 @@ const DynamicAlertManager = () => {
     return (
         <div>
             <h1>Dynamic Alerts Manager</h1>
-            <table>
+            <table className="dynamic-alerts-table">
                 <tbody>
                     {dynamicAlerts.map((dynamicAlert) => {
-                        console.log("RAID ALERT ID: " + dynamicAlert.id);
                         return (
                             <tr>
                                 <td>{dynamicAlert.name}</td>
                                 <td>
-                                    <Link to={`/configs/dynamic-alert/${dynamicAlert.id}`}><button type="button">Edit</button></Link>
-                                    <button onClick={() => {alert("This doesn't function yet")}}>Delete</button>
+                                    <Link to={`/configs/dynamic-alert/${dynamicAlert.id}`}><button className="primary" type="button">Edit</button></Link>
+                                    <button className="destructive" onClick={() => {alert("This doesn't function yet")}}>Delete</button>
                                 </td>
                             </tr>
                         )
                     })}
-                    <tr>
-                        <td></td>
-                        <td><Link to="/configs/dynamic-alert"><button>New Raid Alert</button></Link></td>
-                    </tr>
                 </tbody>
             </table>
+            <Link to={`${process.env.PUBLIC_URL}/configs/dynamic-alert`}><button>Create New Dynamic Alert</button></Link>
         </div>
     )
 }
 
-export default DynamicAlertManager;
+export default RaidAlertManager;

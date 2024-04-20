@@ -26,10 +26,14 @@ contextBridge.exposeInMainWorld(
                 "updateAudioPool",
                 "getUserData",
                 "updateUserData",
-                "updateAlert",
+                "updateAlerts",
                 "getBotConfig",
+                "updateCommands",
                 "saveCommand",
-                "removeCommand"];
+                "removeCommand",
+                "updateRedemptions",
+                "updateGauges"
+            ];
             if (validChannels.includes(channel)) {
                 return await ipcRenderer.invoke(channel, args);
             } else {

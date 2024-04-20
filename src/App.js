@@ -2,16 +2,20 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { useEffect, useState } from 'react';
-import {HashRouter as Router, Route, Routes, Link} from 'react-router-dom';
+import {HashRouter as Router, Route, Routes} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import Bot from './components/Bot';
 import Home from './components/Home';
+import ChannelPoints from './components/ChannelPoints';
 import DynamicAlertCustomizer from './components/DynamicAlertCustomizer';
 import MediaPoolConfig from './components/MediaPoolConfig';
 import DynamicAlertManager from './components/DynamicAlertManager';
 import AlertConfig from './components/AlertConfig';
 import CommandConfig from './components/CommandConfig';
+
+import Menu from './elements/Menu';
+import Gauges from './components/Gauges';
 
 const EXAMPLE = `{
     ...
@@ -63,12 +67,49 @@ const App = () => {
         );
     }
 
+    let menu = (
+        <Menu
+            title="Streamcrabs Control Panel"
+            menu={{
+                "Broadcaster": {
+                    items: [
+                        {
+                            label: "Bot",
+                            to: `/`
+                        }, {
+                            label: "Overlays",
+                            to: `/configs/overlays`
+                        }, {
+                            label: "MediaPool",
+                            to: `/configs/media`
+                        }, {
+                            label: "Commands",
+                            to: `/configs/commands`
+                        }, {
+                            label: "Alert Config",
+                            to: `/configs/alerts`
+                        }, {
+                            label: "Dynamic Alerts",
+                            to: `/configs/dynamic-alerts`
+                        }, {
+                            label: "Channel Points",
+                            to: `/configs/points`
+                        }, {
+                            label: "Gauges",
+                            to: `/configs/gauges`
+                        },
+                    ],
+                    show: true
+                }
+            }} />
+    );
+
     return (
         <div>
             <ToastContainer />
             <Router>
                 <div style={{textAlign: "center"}}>
-                    <Link to='/'>Bot</Link> | <Link to='/configs/overlays'>Overlays</Link> | <Link to='/configs/media'>Media Pool</Link>  | <Link to='/configs/commands'>Commands</Link> | <Link to='/configs/alerts'>Alerts</Link> | <Link to='/configs/dynamic-alerts'>Dynamic Alerts</Link>
+                    {menu}
                 </div>
                 <div className="profile-image">
                     <img src={profileImage} /><br/>
@@ -80,6 +121,8 @@ const App = () => {
                     <Route path="/configs/media" element={<MediaPoolConfig />} />
                     <Route path="/configs/alerts" element={<AlertConfig />} />
                     <Route path="/configs/commands" element={<CommandConfig />} />
+                    <Route path="/configs/points" element={<ChannelPoints />} />
+                    <Route path="/configs/gauges" element={<Gauges />} />
                     <Route path="/configs/dynamic-alert" element={<DynamicAlertCustomizer />} />
                     <Route path="/configs/dynamic-alerts" element={<DynamicAlertManager />} />
                     <Route path="/configs/dynamic-alert/:id" element={<DynamicAlertCustomizer />} />

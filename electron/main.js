@@ -114,14 +114,14 @@ const getTwitchUser = async (username, accessToken) => {
     if (username) {
         url += `?login=${username}`;
     }
-    let [{login, profile_image_url}] = (await axios.get(url, {
+    let [{login, id, profile_image_url}] = (await axios.get(url, {
         headers: {
             "authorization": `Bearer ${accessToken}`,
             "client-id": config.clientId
         }
     })).data.data;
 
-    return {twitchChannel: login, profileImage: profile_image_url};
+    return {twitchChannel: login, profileImage: profile_image_url, id};
 }
 
 const twitchRefresh = async () => {
@@ -138,13 +138,14 @@ const twitchRefresh = async () => {
 const twitchLogin = async () => {
     try {
         let token = await twitchOauth.getAccessToken({
-            scope: 'chat:read chat:edit channel:read:redemptions channel:read:subscriptions bits:read'
+            scope: 'chat:read chat:edit channel:read:redemptions channel:read:subscriptions bits:read channel:manage:redemptions'
         });
-        let {twitchChannel, profileImage} = await getTwitchUser(null, token.access_token);
+        let {twitchChannel, profileImage, id} = await getTwitchUser(null, token.access_token);
         config.accessToken = token.access_token;
         config.refreshToken = token.refresh_token;
         config.twitchChannel = twitchChannel;
         config.profileImage = profileImage;
+        config.broadcasterId = id;
         fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
     } catch (e) {
         console.error("Twitch logon failed: " + e);
@@ -199,9 +200,10 @@ ipcMain.handle('updateEnableList', (event, enabled) => {
 
 ipcMain.handle('saveDynamicAlert', (event, dynamicAlert) => {
     if (dynamicAlert.id) {
-        config.dynamicAlerts[dynamicAlert.id] = dynamicAlert;
+        let index = config.dynamicAlerts.findIndex(({id: alertId}) => alertId === dynamicAlert.id);
+        config.dynamicAlerts[index] = dynamicAlert;
     } else {
-        dynamicAlert.id = uuidv4();
+        dynamicAlert.id = uuidv4().toString();
         config.dynamicAlerts.push(dynamicAlert);
     }
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
@@ -209,9 +211,14 @@ ipcMain.handle('saveDynamicAlert', (event, dynamicAlert) => {
 });
 
 ipcMain.handle('removeDynamicAlert', (event, dynamicAlert) => {
-    delete config.dynamicAlerts[dynamicAlert.id];
+    let index = config.dynamicAlerts.findIndex(({id: alertId}) => alertId === dynamicAlert.id);
+    config.dynamicAlerts.splice(index, 1);
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
     return;
+});
+
+ipcMain.handle('getDynamicAlert', (event, id) => {
+    return config.dynamicAlerts.find(({id: alertId}) => alertId === id);
 });
 
 ipcMain.handle('updateVideoPool', (event, videoPool) => {
@@ -241,9 +248,13 @@ ipcMain.handle('getUserData', (event) => {
     return userData;
 });
 
-ipcMain.handle('updateAlert', (event, alertData) => {
-    alertData.config.id = parseInt(alertData.config.id);
-    config.alertConfigs[alertData.type] = alertData.config;
+ipcMain.handle('updateAlerts', (event, alertConfigs) => {
+    config.alertConfigs = alertConfigs;
+    fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
+});
+
+ipcMain.handle('updateCommands', (event, commands) => {
+    config.commands = commands;
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
 });
 
@@ -255,6 +266,16 @@ ipcMain.handle('saveCommand', (event, commandConfig) => {
 
 ipcMain.handle('removeCommand', (event, key) => {
     delete config.commands[key];
+    fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
+});
+
+ipcMain.handle('updateRedemptions', (event, redemptions) => {
+    config.redemptions = redemptions;
+    fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
+});
+
+ipcMain.handle('updateGauges', (event, gauges) => {
+    config.gauges = gauges;
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
 });
 

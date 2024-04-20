@@ -52,7 +52,7 @@
           {
                "id": 1637781141300,
                "enabled": true,
-               "name": "Suck My Dick Through a Straw",
+               "name": "Bird Up",
                "url": "/media/1637781141293.mp3",
                "volume": 1
           }
@@ -66,28 +66,28 @@
                "type": "DYNAMIC",
                "name": "YOSHI",
                "messageTemplate": "${raider} is raiding with ${viewers} viewers",
-               "id": 1637778194477
+               "id": "Yoshi's Dick"
           },
           "subAlert": {
                "enabled": true,
                "type": "VIDEO",
                "name": null,
                "messageTemplate": "${username} has subscribed at ${subTier}",
-               "id": 1637780141
+               "id": "Cheerleader"
           },
           "cheerAlert": {
                "enabled": true,
                "type": "VIDEO",
                "name": null,
                "messageTemplate": "${username} cheered ${bits} bits",
-               "id": 1637780141
+               "id": "Cheerleader"
           },
           "followAlert": {
                "enabled": true,
                "type": "VIDEO",
                "name": null,
                "messageTemplate": "${username} has followed",
-               "id": 1637780150
+               "id": "Cheerleader"
           }
      },
      "commands": {
@@ -114,57 +114,12 @@
      },
      "dynamicAlerts": [
           {
-               "id": 1637778194477,
-               "name": "Yoshi",
+               "name": "Yoshi's Dick",
+               "variant": "CHARGE_RIGHT",
                "message": "Incoming raid of size ${raidSize} from ${raider}",
                "sprites": [
                     {
-                         "file": "/media/1637778194466.png",
-                         "startFrame": 0,
-                         "endFrame": 9,
-                         "frameWidth": 128,
-                         "frameHeight": 128,
-                         "frameRate": 15,
-                         "cellCount": 10
-                    },
-                    {
-                         "file": "/media/1637778194473.png",
-                         "startFrame": 0,
-                         "endFrame": 9,
-                         "frameWidth": 128,
-                         "frameHeight": 128,
-                         "frameRate": 15,
-                         "cellCount": 10
-                    },
-                    {
-                         "file": "/media/1637778194474.png",
-                         "startFrame": 0,
-                         "endFrame": 9,
-                         "frameWidth": 128,
-                         "frameHeight": 128,
-                         "frameRate": 15,
-                         "cellCount": 10
-                    },
-                    {
-                         "file": "/media/1637778194474.png",
-                         "startFrame": 0,
-                         "endFrame": 9,
-                         "frameWidth": 128,
-                         "frameHeight": 128,
-                         "frameRate": 15,
-                         "cellCount": 10
-                    },
-                    {
-                         "file": "/media/1637778194475.png",
-                         "startFrame": 0,
-                         "endFrame": 9,
-                         "frameWidth": 128,
-                         "frameHeight": 128,
-                         "frameRate": 15,
-                         "cellCount": 10
-                    },
-                    {
-                         "file": "/media/1637778194475.png",
+                         "file": "/media/1713589595547.png",
                          "startFrame": 0,
                          "endFrame": 9,
                          "frameWidth": 128,
@@ -174,19 +129,42 @@
                     }
                ],
                "music": {
-                    "file": "/media/1637778194476.mp3",
+                    "file": "/media/1713589595553.mp3",
                     "volume": 1
                },
                "leavingSound": {
-                    "file": "/media/1637778194477.mp3",
+                    "file": "/media/1713589595555.mp3",
                     "volume": 1
-               }
+               },
+               "id": "1713589595557"
           }
      ],
+     "redemptions": {},
+     "gauges": {
+          "_SUBMETER": {
+               "type": "SUB",
+               "label": "Subscription Goal",
+               "maxValue": 35,
+               "increaseSound": "Yoshi Tongues My Asshole",
+               "decreaseSound": "Yoshi Tongues My Asshole",
+               "completeSound": "Inception Farts"
+          },
+          "FART_ON_STREAM": {
+               "key": "FART_ON_STREAM",
+               "label": "I Will Fart on Stream",
+               "type": "CHEER",
+               "maxValue": 10000,
+               "increaseSound": "Yoshi Tongues My Asshole",
+               "decreaseSound": "Yoshi Tongues My Asshole",
+               "completeSound": "Inception Farts",
+               "currentValue": 0
+          }
+     },
      "clientId": "uczfktv6o7vvdeqxnafizuq672r5od",
      "clientSecret": "o0a0kna2jp9v0c67xsrceye9l9dyun",
      "twitchChannel": "thetruekingofspace",
+     "broadcasterId": "88666502",
      "profileImage": "https://static-cdn.jtvnw.net/jtv_user_pictures/7d4a88a0-259f-4829-ba51-b7f661aacab8-profile_image-300x300.png",
-     "accessToken": "ewt4b1vb24yi5j2ke5lf9fci1byntq",
-     "refreshToken": "6olxvod39984023afzoeslhs6gq6kvrctm904bfa22wumjb593"
+     "accessToken": "t5yohzav4ralv02g9f6du7o6f16uk2",
+     "refreshToken": "ckncxntjiwfkrqewb79vqimw8n8o5xsryjnxsfdy11tpjz49zo"
 }
