@@ -65,7 +65,7 @@ const CommandConfig = (props) => {
                 <React.Fragment>
                     <option value={null}>Choose a Video...</option>
                     {botConfig.videoPool.map((video) => {
-                        return <option value={video._id}>{video.name}</option>
+                        return <option value={video.id}>{video.name}</option>
                     })}
                 </React.Fragment>
             );
@@ -75,11 +75,13 @@ const CommandConfig = (props) => {
                 <React.Fragment>
                     <option value={null}>Choose a Sound...</option>
                     {botConfig.audioPool.map((audio) => {
-                        return <option value={audio._id}>{audio.name}</option>
+                        return <option value={audio.id}>{audio.name}</option>
                     })}
                 </React.Fragment>
             );
             break;
+        default:
+            options = null;
     }
 
     return (
@@ -97,7 +99,7 @@ const CommandConfig = (props) => {
                                         <React.Fragment>
                                             <option value={null}>Choose a Video...</option>
                                             {botConfig.videoPool.map((video) => {
-                                                return <option key={`video-${video._id}`} value={video._id}>{video.name}</option>
+                                                return <option key={`video-${video.id}`} value={video.id}>{video.name}</option>
                                             })}
                                         </React.Fragment>
                                     );
@@ -107,11 +109,13 @@ const CommandConfig = (props) => {
                                         <React.Fragment>
                                             <option value={null}>Choose a Sound...</option>
                                             {botConfig.audioPool.map((audio) => {
-                                                return <option key={`audio-${audio._id}`} value={audio._id}>{audio.name}</option>
+                                                return <option key={`audio-${audio.id}`} value={audio.id}>{audio.name}</option>
                                             })}
                                         </React.Fragment>
                                     );
                                     break;
+                                default:
+                                    options = null;
                             }
 
                             return (

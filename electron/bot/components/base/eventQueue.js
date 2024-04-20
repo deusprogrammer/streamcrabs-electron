@@ -81,6 +81,20 @@ const sendErrorToChat = async(message) => {
     })
 }
 
+const sendEventToOverlays = (type, eventData) => {
+    const targets = ["panel"]
+
+    if (!eventData.results) {
+        eventData.results = {};
+    }
+
+    sendEvent({
+        type,
+        targets,
+        eventData
+    })
+}
+
 let eventContext = {
     botContext: {}
 }
@@ -140,3 +154,4 @@ exports.sendErrorToChat = sendErrorToChat;
 exports.startEventListener = startEventListener;
 exports.stopEventListener = stopEventListener;
 exports.isPanelInitialized = isPanelInitialized;
+exports.sendEventToOverlays = sendEventToOverlays;

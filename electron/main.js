@@ -26,7 +26,7 @@ let botRunning = false;
 let uiLocked = false;
 
 const uuidv4 = () => {
-    return Date.now();
+    return Date.now().toString();
 }
 
 const oauthConfig = {
@@ -203,7 +203,7 @@ ipcMain.handle('saveDynamicAlert', (event, dynamicAlert) => {
         let index = config.dynamicAlerts.findIndex(({id: alertId}) => alertId === dynamicAlert.id);
         config.dynamicAlerts[index] = dynamicAlert;
     } else {
-        dynamicAlert.id = uuidv4().toString();
+        dynamicAlert.id = uuidv4();
         config.dynamicAlerts.push(dynamicAlert);
     }
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));

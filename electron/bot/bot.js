@@ -1,5 +1,3 @@
-const tmi = require('tmi.js');
-
 const { StaticAuthProvider } = require('@twurple/auth');
 const { ChatClient } = require('@twurple/chat');
 const { PubSubClient } = require('@twurple/pubsub');
@@ -126,7 +124,7 @@ const startBot = async (botConfig) => {
                 try {
                     switch (context.tokens[0]) {
                         case "!about":
-                            EventQueue.sendInfoToChat(`Chat battler dungeon version ${versionNumber} written by thetruekingofspace`);
+                            EventQueue.sendInfoToChat(`Streamcrabs version ${versionNumber} written by thetruekingofspace`);
                             break;
                         default:
                             if (commands[context.tokens[0]]) {

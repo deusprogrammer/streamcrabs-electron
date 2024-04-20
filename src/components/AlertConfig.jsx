@@ -19,7 +19,7 @@ const AlertConfigElement = (props) => {
                         } disabled={props.saving}>
                             <option value="null">Choose Video...</option>
                             {props.botConfig.videoPool.map((video) => {
-                                return <option value={video._id}>{video.name}</option>
+                                return <option value={video.id}>{video.name}</option>
                             })}
                         </select>
                     </td>
@@ -37,7 +37,7 @@ const AlertConfigElement = (props) => {
                     } disabled={props.saving}>
                         <option value="null">Choose Audio...</option>
                         {props.botConfig.audioPool.map((audio) => {
-                            return <option value={audio._id}>{audio.name}</option>
+                            return <option value={audio.id}>{audio.name}</option>
                         })}
                     </select>
                 </td>
@@ -55,7 +55,7 @@ const AlertConfigElement = (props) => {
                     } disabled={props.saving}>
                         <option value="null">Choose Gif...</option>
                         {props.botConfig.imagePool.map((image) => {
-                            return <option value={image._id}>{image.name}</option>
+                            return <option value={image.id}>{image.name}</option>
                         })}
                     </select>
                 </td>
@@ -73,12 +73,14 @@ const AlertConfigElement = (props) => {
                     } disabled={props.saving}>
                         <option value="null">Choose Dynamic...</option>
                         {props.dynamicAlerts.map((alert) => {
-                            return <option value={alert._id}>{alert.name}</option>
+                            return <option value={alert.id}>{alert.name}</option>
                         })}
                     </select>
                 </td>
             </React.Fragment>);
             break;
+        default:
+            mediaSelector = null;
     }
 
     return (
@@ -124,7 +126,7 @@ const AlertConfigElement = (props) => {
                             } disabled={props.saving}>
                                 <option value={null}>Choose Audio...</option>
                                 {props.botConfig.audioPool.map((audio) => {
-                                    return <option value={audio._id}>{audio.name}</option>
+                                    return <option value={audio.id}>{audio.name}</option>
                                 })}
                             </select>
                         </td>
