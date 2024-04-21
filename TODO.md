@@ -15,7 +15,12 @@
 * ~~Add redemptions config to electron version~~
 * ~~Update CSS styling of app~~
 * ~~Need to fix raid alert~~
-* Need to fix gauges
+* ~~Need to fix gauges~~
 * ~~Need to fix redemptions~~
 * ~~Need to store media in media pool~~
 * ~~Fix sound edit in dynamic alert~~
+* Allow CBD to still work with the server
+* ~~Change title of Electron App~~
+* Create icon for app.
+* Embed file writer, tts, and proxy into app.
+* Migrate to react-electron-boiler-plate
