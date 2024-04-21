@@ -16,7 +16,7 @@ const SpriteStripe = (props) => {
 
     const updateImage = () => {
         let img = new Image();
-        img.src = `${props.url.startsWith("data:") ? props.url : 'app://' + props.url}`;
+        img.src = props.url;
         removeAllChildren(framesDiv.current);
         img.addEventListener('load', function (e) {
             let {width, height} = e.target;

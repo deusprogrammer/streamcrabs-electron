@@ -5,6 +5,7 @@ import SpriteStrip from '../elements/SpriteStrip';
 
 import { getDynamicAlert, storeDynamicAlert, storeMedia, updateDynamicAlert } from '../api/StreamCrabsApi';
 import { useNavigate, useParams } from 'react-router';
+import { createAbsoluteUrl } from '../utils/UrlUtil';
 
 const readFileAsDataUri = (file) => {
     return new Promise(function(resolve,reject){
@@ -116,7 +117,6 @@ const RaidAlertCustomizer = (props) => {
         }
 
         let config = {
-            twitchChannel: props.channel,
             name,
             variant,
             message,
@@ -141,10 +141,9 @@ const RaidAlertCustomizer = (props) => {
             }
         };
 
-        console.log("CONFIG: " + JSON.stringify(config, null, 5));
-
         if (id) {
-            return await updateDynamicAlert(id, config);
+            config.id = id;
+            return await updateDynamicAlert(config);
         } else {
             return await storeDynamicAlert(config);
         }
@@ -204,7 +203,7 @@ const RaidAlertCustomizer = (props) => {
                             <div style={{marginLeft: "10px"}}>
                                 <div style={{width: "100%", overflowX: "scroll"}}>
                                     <Animation 
-                                        url={sprite.file}
+                                        url={createAbsoluteUrl(sprite.file)}
                                         frameCount={sprite.frames}
                                         speed={sprite.frameRate}
                                         startFrame={sprite.startFrame}
@@ -219,7 +218,7 @@ const RaidAlertCustomizer = (props) => {
                                 </div>
                                 <div style={{width: "100%", backgroundColor: "white", overflowX: "scroll", whiteSpace: "nowrap"}}>
                                     <SpriteStrip
-                                        url={sprite.file}
+                                        url={createAbsoluteUrl(sprite.file)}
                                         frameCount={sprite.frames}
                                         startFrame={sprite.startFrame}
                                         endFrame={sprite.endFrame} 
@@ -377,7 +376,7 @@ const RaidAlertCustomizer = (props) => {
                         </td>
                         <td style={{verticalAlign: "middle"}}>
                             <audio 
-                                src={bgm.file}
+                                src={createAbsoluteUrl(bgm.file)}
                                 width="300px" 
                                 controls  />
                         </td>
@@ -407,7 +406,7 @@ const RaidAlertCustomizer = (props) => {
                                 onChange={(e) => {setSFXVolume(parseFloat(e.target.value))}} />
                         </td><td style={{verticalAlign: "middle"}}>
                             <audio 
-                                src={sfx.file} 
+                                src={createAbsoluteUrl(sfx.file)} 
                                 width="300px" 
                                 controls />
                         </td>

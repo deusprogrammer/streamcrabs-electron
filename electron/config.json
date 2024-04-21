@@ -114,7 +114,7 @@
      },
      "dynamicAlerts": [
           {
-               "name": "Yoshi's Dick",
+               "name": "Yoshi",
                "variant": "CHARGE_RIGHT",
                "message": "Incoming raid of size ${raidSize} from ${raider}",
                "sprites": [
@@ -133,10 +133,10 @@
                     "volume": 1
                },
                "leavingSound": {
-                    "file": "/media/1713589595555.mp3",
+                    "file": "/media/1713683060251.mp3",
                     "volume": 1
                },
-               "id": "1713589595557"
+               "id": "1713683060260"
           }
      ],
      "redemptions": {},
@@ -165,6 +165,6 @@
      "twitchChannel": "thetruekingofspace",
      "broadcasterId": "88666502",
      "profileImage": "https://static-cdn.jtvnw.net/jtv_user_pictures/7d4a88a0-259f-4829-ba51-b7f661aacab8-profile_image-300x300.png",
-     "accessToken": "jqpha67datoooajp9gapc7taie0r1n",
+     "accessToken": "yznpv436ihk0ywzcupd6yv5lv2gghj",
      "refreshToken": "ckncxntjiwfkrqewb79vqimw8n8o5xsryjnxsfdy11tpjz49zo"
 }

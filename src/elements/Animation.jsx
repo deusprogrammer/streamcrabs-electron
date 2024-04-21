@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { createAbsoluteUrl } from '../utils/UrlUtil';
 
 const Animation = (props) => {
     const canvas = useRef();
@@ -57,7 +56,7 @@ const Animation = (props) => {
 
     const updateImage = () => {
         let img = new Image();
-        img.src = createAbsoluteUrl(props.url);
+        img.src = props.url;
         img.addEventListener('load', (e) => {
             let {width, height} = e.path[0];
             setDimensions({w: width, h: height});
