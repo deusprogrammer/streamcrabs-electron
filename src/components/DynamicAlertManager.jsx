@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
-import { getBotConfig } from '../api/StreamCrabsApi';
+import { getBotConfig, removeDynamicAlert } from '../api/StreamCrabsApi';
 
-const RaidAlertManager = (props) => {
+const RaidAlertManager = () => {
     let [dynamicAlerts, setDynamicAlerts] = useState([]);
 
+    let loadDynamicAlerts = async () => {
+        let {dynamicAlerts} = await getBotConfig();
+        setDynamicAlerts(dynamicAlerts);
+    }
+
     useEffect(() => {
-        (async () => {
-            let {dynamicAlerts} = await getBotConfig();
-            setDynamicAlerts(dynamicAlerts);
-        })()
+        loadDynamicAlerts();
     }, []);
 
     return (
@@ -23,7 +25,7 @@ const RaidAlertManager = (props) => {
                                 <td>{dynamicAlert.name}</td>
                                 <td>
                                     <Link to={`/configs/dynamic-alert/${dynamicAlert.id}`}><button className="primary" type="button">Edit</button></Link>
-                                    <button className="destructive" onClick={() => {alert("This doesn't function yet")}}>Delete</button>
+                                    <button className="destructive" onClick={() => {removeDynamicAlert(dynamicAlert); loadDynamicAlerts();}}>Delete</button>
                                 </td>
                             </tr>
                         )

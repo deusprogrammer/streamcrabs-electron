@@ -35,6 +35,11 @@ const SpriteStripe = (props) => {
                     props.onEndFrameClick(i);
                     e.preventDefault();
                 }
+
+                if (!framesDiv || !framesDiv.current) {
+                    return;
+                }
+
                 framesDiv.current.append(canvas);
 
                 let ctx = canvas.getContext("2d");

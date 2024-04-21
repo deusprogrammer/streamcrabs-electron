@@ -24,6 +24,10 @@ export const updateDynamicAlert = async (dynamicAlertConfig) => {
     return await window.api.send("saveDynamicAlert", dynamicAlertConfig);
 }
 
+export const removeDynamicAlert = async (dynamicAlertConfig) => {
+    return await window.api.send("removeDynamicAlert", dynamicAlertConfig);
+}
+
 export const getDynamicAlert = async (id) => {
     return await window.api.send("getDynamicAlert", id);
 }

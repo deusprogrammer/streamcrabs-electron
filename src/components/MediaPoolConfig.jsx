@@ -1,6 +1,7 @@
 import React from 'react';
 import {toast} from 'react-toastify';
 import { getBotConfig, updateAudioPool, updateVideoPool, storeMedia } from '../api/StreamCrabsApi';
+import { createAbsoluteUrl } from '../utils/UrlUtil';
 
 export default class MediaPoolConfig extends React.Component {
     constructor(props) {
@@ -149,18 +150,21 @@ export default class MediaPoolConfig extends React.Component {
         let mediaUrl = "";
         if (type === "audio") {
             mediaData.mimeType = "audio/mp3";
+            mediaData.extension = ".mp3";
             mediaData.imagePayload = this.state.uploadAudioData;
             mediaData.title = this.state.uploadAudioFileName;
             mediaPool = [...this.state.audioPool];
             mediaUrl = this.state.addAudioUrl;
         } else if (type === "video") {
             mediaData.mimeType = "video/mp4";
+            mediaData.extension = ".mp4";
             mediaData.imagePayload = this.state.uploadVideoData;
             mediaData.title = this.state.uploadVideoFileName;
             mediaPool = [...this.state.videoPool];
             mediaUrl = this.state.addVideoUrl;
         } else if (type === "image") {
             mediaData.mimeType = "image/gif";
+            mediaData.extension = ".gif";
             mediaData.imagePayload = this.state.uploadImageData;
             mediaData.title = this.state.uploadImageFileName;
             mediaPool = [...this.state.imagePool];
@@ -380,7 +384,7 @@ export default class MediaPoolConfig extends React.Component {
                                     <div className="video-preview">
                                         <audio 
                                             id="audio-preview"
-                                            src={"app://" + element.url} 
+                                            src={createAbsoluteUrl(element.url)} 
                                             width="300px" 
                                             controls 
                                             preload="none" />
@@ -426,7 +430,7 @@ export default class MediaPoolConfig extends React.Component {
                                 <li key={`video${index}`} style={{border: this.state.dirtyFlags[`video${index}`] ? "2px solid red" : "none"}}>
                                     <div className="video-preview">
                                         <video 
-                                            src={"app://" + element.url} 
+                                            src={createAbsoluteUrl(element.url)} 
                                             width="300px" 
                                             controls 
                                             preload="none" />

@@ -18,4 +18,4 @@
 * Need to fix gauges
 * ~~Need to fix redemptions~~
 * Need to store media in media pool
-* Fix sound edit in dynamic alert
+* ~~Fix sound edit in dynamic alert~~

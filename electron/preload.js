@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld(
                 "storeMedia",
                 "updateEnableList",
                 "getDynamicAlert",
+                "removeDynamicAlert",
                 "saveDynamicAlert",
                 "removeRaidAlert",
                 "updateVideoPool",
