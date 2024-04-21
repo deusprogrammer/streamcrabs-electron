@@ -155,18 +155,38 @@
                "type": "SUB",
                "label": "Subscription Goal",
                "maxValue": 35,
-               "increaseSound": "Yoshi Tongues My Asshole",
-               "decreaseSound": "Yoshi Tongues My Asshole",
-               "completeSound": "Inception Farts"
+               "increaseSound": "1637781092",
+               "decreaseSound": "1637781092",
+               "completeSound": "1637780187"
           },
           "FART_ON_STREAM": {
                "key": "FART_ON_STREAM",
                "label": "I Will Fart on Stream",
                "type": "CHEER",
                "maxValue": 10000,
-               "increaseSound": "Yoshi Tongues My Asshole",
-               "decreaseSound": "Yoshi Tongues My Asshole",
-               "completeSound": "Inception Farts",
+               "increaseSound": "1637781092",
+               "decreaseSound": "1637781092",
+               "completeSound": "1637780187",
+               "currentValue": 0
+          },
+          "TEST": {
+               "key": "TEST",
+               "label": "Test",
+               "type": "CUSTOM",
+               "maxValue": 10,
+               "increaseSound": "1637781092",
+               "decreaseSound": "1637781092",
+               "completeSound": "1637780187",
+               "currentValue": 0
+          },
+          "TEST_2": {
+               "key": "TEST_2",
+               "label": "Test",
+               "type": "CUSTOM",
+               "maxValue": 1000,
+               "increaseSound": "1637781092",
+               "decreaseSound": "1637781092",
+               "completeSound": "1637780187",
                "currentValue": 0
           }
      },
@@ -175,6 +195,6 @@
      "twitchChannel": "thetruekingofspace",
      "broadcasterId": "88666502",
      "profileImage": "https://static-cdn.jtvnw.net/jtv_user_pictures/7d4a88a0-259f-4829-ba51-b7f661aacab8-profile_image-300x300.png",
-     "accessToken": "auwtgzg9o3f7fio9uffzwkivo2fhm6",
+     "accessToken": "ims7ozgpap2ffpx3uonpd7x5bw4itn",
      "refreshToken": "ckncxntjiwfkrqewb79vqimw8n8o5xsryjnxsfdy11tpjz49zo"
 }

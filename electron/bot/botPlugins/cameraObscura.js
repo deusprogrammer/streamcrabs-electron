@@ -1,4 +1,6 @@
+const { ipcMain } = require('electron');
 const EventQueue = require('../components/base/eventQueue');
+const Xhr = require('../components/base/xhr');
 
 let redemptionTypeMap = {
     VIDEO: "MULTI",
@@ -6,6 +8,10 @@ let redemptionTypeMap = {
     DYNAMIC: "MULTI",
     AUDIO: "SOUND_PLAYER"
 };
+
+const updateGauge = (gauges) => {
+    ipcMain.emit('updateGauges', gauges);
+}
 
 const performAction = async (type, id, soundId, subPanel, message, botContext) => {
     if (type === "VIDEO") {
@@ -205,7 +211,7 @@ exports.bitsHook = async ({bits, userName}, botContext) => {
     //         });
 
     //         botContext.botConfig.gauges[subPanel].currentValue = currentValue + bits;
-    //         // await Xhr.updateGauge(TWITCH_EXT_CHANNEL_ID, botContext.botConfig.gauges);
+    //         updateGauge(TWITCH_EXT_CHANNEL_ID, botContext.botConfig.gauges);
     //     }
     // }
 
@@ -224,31 +230,31 @@ exports.subscriptionHook = async ({userName, subPlan}, botContext) => {
     }
 
     // Get all gauges related to subscription tracking
-    // const subGauges = Object.keys(botContext.botConfig.gauges).filter(key => botContext.botConfig.gauges[key].type === "SUB");
-    // if (subGauges.length > 0) {
-    //     // Refresh token
-    //     const {total: currentValue} = await Xhr.getSubscriptionMeta(botContext.botConfig);
-    //     for (const subPanel of subGauges) {
-    //         const {label, maxValue, increaseSound, decreaseSound, completeSound} = botContext.botConfig.gauges[subPanel];
+    const subGauges = Object.keys(botContext.botConfig.gauges).filter(key => botContext.botConfig.gauges[key].type === "SUB");
+    if (subGauges.length > 0) {
+        // Refresh token
+        const {total: currentValue} = await Xhr.getSubscriptionMeta(botContext.botConfig);
+        for (const subPanel of subGauges) {
+            const {label, maxValue, increaseSound, decreaseSound, completeSound} = botContext.botConfig.gauges[subPanel];
 
-    //         let {url: increaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === increaseSound);
-    //         let {url: decreaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === decreaseSound);
-    //         let {url: completeSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === completeSound);
+            let {url: increaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === increaseSound);
+            let {url: decreaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === decreaseSound);
+            let {url: completeSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === completeSound);
 
-    //         EventQueue.sendEventToOverlays("GAUGE", {
-    //             type: "SUB",
-    //             subPanel: "_ALL_GAUGES",
-    //             gaugeKey: subPanel,
-    //             label,
-    //             currentValue,
-    //             maxValue,
-    //             increaseSoundUrl,
-    //             decreaseSoundUrl,
-    //             completeSoundUrl,
-    //             init: false
-    //         });
-    //     }
-    // }
+            EventQueue.sendEventToOverlays("GAUGE", {
+                type: "SUB",
+                subPanel: "_ALL_GAUGES",
+                gaugeKey: subPanel,
+                label,
+                currentValue,
+                maxValue,
+                increaseSoundUrl,
+                decreaseSoundUrl,
+                completeSoundUrl,
+                init: false
+            });
+        }
+    }
 
     if (!enabled) {
         return;
@@ -316,7 +322,7 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
                 // });
                 // botConfig.gauges[subPanel].currentValue = currentValue;
 
-                // await Xhr.updateGauge(TWITCH_EXT_CHANNEL_ID, botConfig.gauges);
+                // updateGauge(botConfig.gauges);
                 break; 
             }
         default:
@@ -331,48 +337,48 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
         let {id: mediaId, soundId, type, subPanel} = customReward;
         if (!EventQueue.isPanelInitialized(redemptionTypeMap[type], subPanel)) {
             EventQueue.sendInfoToChat("Required panel is not available for this stream");
-            // await Xhr.refundRedemption(rewardId, id, botConfig);
+            await Xhr.refundRedemption(rewardId, id, botConfig);
             return;
         }
         performAction(type, mediaId, soundId, subPanel, null, botContext);
-        // await Xhr.clearRedemption(rewardId, id, botConfig);
+        await Xhr.clearRedemption(rewardId, id, botConfig);
         return;
     }
 
     if (rewardTitle.toUpperCase() === "RANDOM SOUND" || rewardTitle.toUpperCase() === "PLAY RANDOM SOUND") {
         if (!EventQueue.isPanelInitialized("SOUND_PLAYER")) {
             EventQueue.sendInfoToChat("Sound panel is not available for this stream");
-            // await Xhr.refundRedemption(rewardId, id, botConfig);
+            await Xhr.refundRedemption(rewardId, id, botConfig);
             return;
         }
         
         performAction("AUDIO", null, null, "default", null, botContext);
 
-        // await Xhr.clearRedemption(rewardId, id, botConfig);
+        await Xhr.clearRedemption(rewardId, id, botConfig);
     }  else if (rewardTitle.toUpperCase() === "RANDOM VIDEO" || rewardTitle.toUpperCase() === "PLAY RANDOM VIDEO") {
         if (!EventQueue.isPanelInitialized("MULTI")) {
             EventQueue.sendInfoToChat("Video panel is not available for this stream");
-            // await Xhr.refundRedemption(rewardId, id, botConfig);
+            await Xhr.refundRedemption(rewardId, id, botConfig);
             return;
         }
 
         performAction("VIDEO", null, null, "default", null, botContext);
 
-        // await Xhr.clearRedemption(rewardId, id, botConfig, botContext);
+        await Xhr.clearRedemption(rewardId, id, botConfig, botContext);
     } else if (rewardTitle.toUpperCase() === "BIRD UP") {
         if (!EventQueue.isPanelInitialized("MULTI")) {
             EventQueue.sendInfoToChat("Video panel is not available for this stream");
-            // await Xhr.refundRedemption(rewardId, id, botConfig);
+            await Xhr.refundRedemption(rewardId, id, botConfig);
             return;
         }
 
         EventQueue.sendEventToOverlays("BIRDUP", {subPanel: "default"});
 
-        // await Xhr.clearRedemption(rewardId, id, botConfig);
+        await Xhr.clearRedemption(rewardId, id, botConfig);
     } else if (rewardTitle.toUpperCase() === "BAD APPLE") {
         if (!EventQueue.isPanelInitialized("MULTI")) {
             EventQueue.sendInfoToChat("Video panel is not available for this stream");
-            // await Xhr.refundRedemption(rewardId, id, botConfig);
+            await Xhr.refundRedemption(rewardId, id, botConfig);
             return;
         }
 
@@ -383,11 +389,11 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
             subPanel: "default"
         });
 
-        // await Xhr.clearRedemption(rewardId, id, botConfig);
+        await Xhr.clearRedemption(rewardId, id, botConfig);
     } else if (rewardTitle.toUpperCase() === "BE A BIG SHOT") {
         if (!EventQueue.isPanelInitialized("MULTI") || !EventQueue.isPanelInitialized("FILE_WRITER")) {
             EventQueue.sendInfoToChat("Video panel or filewriter proxy is not available for this stream");
-            // await Xhr.refundRedemption(rewardId, id, botConfig);
+            await Xhr.refundRedemption(rewardId, id, botConfig);
             return;
         }
 
@@ -406,58 +412,58 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
 
         EventQueue.sendInfoToChat(`${userName} is now a BIG SHOT!`);
 
-        // await Xhr.clearRedemption(rewardId, id, botConfig);
+        await Xhr.clearRedemption(rewardId, id, botConfig);
     }
 }
 
 exports.wsInitHook = async ({subPanel: reqKey, name}, botContext) => {
-    // let botConfig = botContext.botConfig;
+    let botConfig = botContext.botConfig;
 
     if (name === "GAUGE") {
-        // let gauges = [];
-        // if (reqKey !== "_ALL_GAUGES") {
-        //     gauges.push({subPanel: reqKey, gaugeKey, ...botConfig.gauges[gaugeKey]});
-        // } else {
-        //     gauges = Object.keys(botConfig.gauges).map((key) => {
-        //         let gauge = botConfig.gauges[key];
+        let gauges = [];
+        if (reqKey !== "_ALL_GAUGES") {
+            gauges.push({subPanel: reqKey, gaugeKey: reqKey, ...botConfig.gauges[reqKey]});
+        } else {
+            gauges = Object.keys(botConfig.gauges).map((key) => {
+                let gauge = botConfig.gauges[key];
 
-        //         return {
-        //             subPanel: reqKey,
-        //             gaugeKey: key,
-        //             ...gauge
-        //         }
-        //     });
-        // }
+                return {
+                    subPanel: reqKey,
+                    gaugeKey: key,
+                    ...gauge
+                }
+            });
+        }
 
-        // for (let gauge of gauges) {
-        //     if (!gauge) {
-        //         return;
-        //     }
+        for (let gauge of gauges) {
+            if (!gauge) {
+                return;
+            }
 
-        //     console.log("GAUGE: " + JSON.stringify(gauge, null, 5));
+            console.log("GAUGE: " + JSON.stringify(gauge, null, 5));
 
-        //     let {label, subPanel, gaugeKey, currentValue, maxValue, increaseSound, decreaseSound, completeSound, type} = gauge;
+            let {label, subPanel, gaugeKey, currentValue, maxValue, increaseSound, decreaseSound, completeSound, type} = gauge;
 
-        //     let {url: increaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === increaseSound);
-        //     let {url: decreaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === decreaseSound);
-        //     let {url: completeSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === completeSound);
+            let {url: increaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === increaseSound);
+            let {url: decreaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === decreaseSound);
+            let {url: completeSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === completeSound);
 
-        //     if (type === "SUB") {
-        //         currentValue = (await Xhr.getSubscriptionMeta(botContext.botConfig)).total;
-        //         console.log("SUB: " + currentValue);
-        //     }
+            if (type === "SUB") {
+                currentValue = (await Xhr.getSubscriptionMeta(botContext.botConfig)).total;
+                console.log("SUB: " + currentValue);
+            }
 
-        //     EventQueue.sendEventToOverlays("GAUGE", {
-        //         label,
-        //         currentValue,
-        //         maxValue,
-        //         subPanel,
-        //         gaugeKey,
-        //         increaseSoundUrl,
-        //         decreaseSoundUrl, 
-        //         completeSoundUrl,
-        //         init: true
-        //     });
-        // }
+            EventQueue.sendEventToOverlays("GAUGE", {
+                label,
+                currentValue,
+                maxValue,
+                subPanel,
+                gaugeKey,
+                increaseSoundUrl,
+                decreaseSoundUrl, 
+                completeSoundUrl,
+                init: true
+            });
+        }
     }
 }

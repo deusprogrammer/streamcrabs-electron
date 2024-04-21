@@ -286,3 +286,8 @@ ipcMain.handle('getBotConfig', () => {
 ipcMain.handle('getBotRunning', () => {
     return botRunning;
 });
+
+ipcMain.on('updateGauges', (event, gauges) => {
+    config.gauges = gauges;
+    fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
+})

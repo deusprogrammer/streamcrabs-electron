@@ -28,7 +28,7 @@ const connectWs = () => {
     
             if (event.type === "PANEL_INIT") {
                 for (let plugin of eventContext.botContext.plugins) {
-                    plugin.wsInitHook(event);
+                    plugin.wsInitHook(event, eventContext.botContext);
                 }
     
                 // Add panel to list for enabling and disabling functionality

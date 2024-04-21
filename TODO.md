@@ -17,5 +17,5 @@
 * ~~Need to fix raid alert~~
 * Need to fix gauges
 * ~~Need to fix redemptions~~
-* Need to store media in media pool
+* ~~Need to store media in media pool~~
 * ~~Fix sound edit in dynamic alert~~

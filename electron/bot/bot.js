@@ -9,6 +9,7 @@ const readline = require('readline');
 const requestPlugin = require('./botPlugins/requests');
 const deathCounterPlugin = require('./botPlugins/deathCounter');
 const cameraObscura = require('./botPlugins/cameraObscura');
+const modTools = require('./botPlugins/modTools');
 
 const versionNumber = "3.0b";
 
@@ -84,7 +85,7 @@ const startBot = async (botConfig) => {
         let {accessToken, clientId, twitchChannel, devMode} = botConfig;
         let botContext = {};
 
-        let plugins = [deathCounterPlugin, requestPlugin, cameraObscura];
+        let plugins = [deathCounterPlugin, requestPlugin, cameraObscura, modTools];
         
         const onConsoleCommand = (command) => {
             client.say(twitchChannel, command);

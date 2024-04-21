@@ -1,13 +1,13 @@
 import React from 'react';
 
-export default (props) => {
+const MediaPoolSelector = (props) => {
     switch (props.type) {
         case "VIDEO":
             return (
                 <select value={props.value} onChange={props.onChange} disabled={props.disabled}>
                     <option value=''>Choose a Video...</option>
                     {props.config.videoPool.map((video) => {
-                        return <option key={`video-${video._id}-${props.keySuffix}`} value={video._id}>{video.name}</option>
+                        return <option key={`video-${video.id}-${props.keySuffix}`} value={video.id}>{video.name}</option>
                     })}
                 </select>
             );
@@ -16,7 +16,7 @@ export default (props) => {
                 <select value={props.value} onChange={props.onChange} disabled={props.disabled}>
                     <option value=''>Choose a Sound...</option>
                     {props.config.audioPool.map((audio) => {
-                        return <option key={`audio-${audio._id}-${props.keySuffix}`} value={audio._id}>{audio.name}</option>
+                        return <option key={`audio-${audio.id}-${props.keySuffix}`} value={audio.id}>{audio.name}</option>
                     })}
                 </select>
             );
@@ -25,7 +25,7 @@ export default (props) => {
                 <select value={props.value} onChange={props.onChange} disabled={props.disabled}>
                     <option value=''>Choose a Gif...</option>
                     {props.config.imagePool.map((image) => {
-                        return <option key={`image-${image._id}-${props.keySuffix}`} value={image._id}>{image.name}</option>
+                        return <option key={`image-${image.id}-${props.keySuffix}`} value={image.id}>{image.name}</option>
                     })}
                 </select>
             );
@@ -33,3 +33,5 @@ export default (props) => {
             return <></>
     }
 }
+
+export default MediaPoolSelector;
