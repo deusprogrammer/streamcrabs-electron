@@ -18,6 +18,11 @@
                "volume": 1,
                "chromaKey": "blue",
                "enabled": true
+          },
+          {
+               "name": "Fuwawa Momoco",
+               "url": "/media/1713685632513.mp4",
+               "volume": 1
           }
      ],
      "audioPool": [
@@ -44,7 +49,7 @@
           },
           {
                "id": "1637781092",
-               "name": "Yoshi Tongues My Asshole",
+               "name": "Yoshi is a Bitch",
                "url": "/media/1637781001639.mp3",
                "volume": 1,
                "enabled": true
@@ -54,6 +59,11 @@
                "enabled": true,
                "name": "Bird Up",
                "url": "/media/1637781141293.mp3",
+               "volume": 1
+          },
+          {
+               "name": "Future Respawning Button",
+               "url": "/media/1713685587135.mp3",
                "volume": 1
           }
      ],
@@ -165,6 +175,6 @@
      "twitchChannel": "thetruekingofspace",
      "broadcasterId": "88666502",
      "profileImage": "https://static-cdn.jtvnw.net/jtv_user_pictures/7d4a88a0-259f-4829-ba51-b7f661aacab8-profile_image-300x300.png",
-     "accessToken": "lw9km2szj8ulpxwdb7f7qlkjnhpasd",
+     "accessToken": "auwtgzg9o3f7fio9uffzwkivo2fhm6",
      "refreshToken": "ckncxntjiwfkrqewb79vqimw8n8o5xsryjnxsfdy11tpjz49zo"
 }
