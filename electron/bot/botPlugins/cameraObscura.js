@@ -287,42 +287,42 @@ exports.redemptionHook = async ({rewardId, rewardPrompt, id, rewardTitle, userNa
 
         switch (type) {
             case "GAUGE": {
-                // if (!botConfig.gauges[subPanel]) {
-                //     break;
-                // }
+                if (!botConfig.gauges[subPanel]) {
+                    break;
+                }
 
-                // let {label, currentValue, maxValue, increaseSound, decreaseSound, completeSound, type} = botConfig.gauges[subPanel];
+                let {label, currentValue, maxValue, increaseSound, decreaseSound, completeSound, type} = botConfig.gauges[subPanel];
 
-                // if (type !== "CUSTOM") {
-                //     return;
-                // }
+                if (type !== "CUSTOM") {
+                    return;
+                }
 
-                // if (action === "ADD") {
-                //     currentValue += parseInt(parameter);
-                // } else if (action === "SUB") {
-                //     currentValue -= parseInt(parameter);
-                // } else if (action === "SET") {
-                //     currentValue = parseInt(parameter);
-                // }
+                if (action === "ADD") {
+                    currentValue += parseInt(parameter);
+                } else if (action === "SUB") {
+                    currentValue -= parseInt(parameter);
+                } else if (action === "SET") {
+                    currentValue = parseInt(parameter);
+                }
 
-                // let {url: increaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === increaseSound);
-                // let {url: decreaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === decreaseSound);
-                // let {url: completeSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === completeSound);
+                let {url: increaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === increaseSound);
+                let {url: decreaseSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === decreaseSound);
+                let {url: completeSoundUrl} = botContext.botConfig.audioPool.find(audio => audio.id === completeSound);
 
-                // EventQueue.sendEventToOverlays("GAUGE", {
-                //     label,
-                //     subPanel: "_ALL_GAUGES",
-                //     gaugeKey: subPanel,
-                //     currentValue,
-                //     maxValue,
-                //     increaseSoundUrl,
-                //     decreaseSoundUrl,
-                //     completeSoundUrl,
-                //     init: false
-                // });
-                // botConfig.gauges[subPanel].currentValue = currentValue;
+                EventQueue.sendEventToOverlays("GAUGE", {
+                    label,
+                    subPanel: "_ALL_GAUGES",
+                    gaugeKey: subPanel,
+                    currentValue,
+                    maxValue,
+                    increaseSoundUrl,
+                    decreaseSoundUrl,
+                    completeSoundUrl,
+                    init: false
+                });
+                botConfig.gauges[subPanel].currentValue = currentValue;
 
-                // updateGauge(botConfig.gauges);
+                updateGauge(botConfig.gauges);
                 break; 
             }
         default:
