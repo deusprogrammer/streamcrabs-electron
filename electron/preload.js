@@ -33,7 +33,8 @@ contextBridge.exposeInMainWorld(
                 "saveCommand",
                 "removeCommand",
                 "updateRedemptions",
-                "updateGauges"
+                "updateGauges",
+                "migrate"
             ];
             if (validChannels.includes(channel)) {
                 return await ipcRenderer.invoke(channel, args);

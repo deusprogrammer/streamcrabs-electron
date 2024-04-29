@@ -16,6 +16,7 @@ import CommandConfig from './components/CommandConfig';
 
 import Menu from './elements/Menu';
 import Gauges from './components/Gauges';
+import Migration from './components/Migration';
 
 const EXAMPLE = `{
     ...
@@ -97,7 +98,10 @@ const App = () => {
                         }, {
                             label: "Gauges",
                             to: `/configs/gauges`
-                        },
+                        }, {
+                            label: "Migration",
+                            to: `/migrations`
+                        }
                     ],
                     show: true
                 }
@@ -117,6 +121,7 @@ const App = () => {
                 </div>
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/migrations" element={<Migration />} />
                     <Route path="/configs/overlays" element={<Bot />} />
                     <Route path="/configs/media" element={<MediaPoolConfig />} />
                     <Route path="/configs/alerts" element={<AlertConfig />} />

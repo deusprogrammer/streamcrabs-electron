@@ -7,8 +7,10 @@ const electronOauth2 = require('electron-oauth2');
 
 const { runImageServer } = require('./fileServer');
 const { startBot, stopBot } = require('./bot/bot');
+const { migrateConfig } = require('./migration');
 
 const CONFIG_FILE = path.join(__dirname, "config.json");
+const MIGRATION_FILE = path.join(__dirname, "migration.json");
 const USER_DATA_FILE = path.join(__dirname, "config.json");
 const REACT_APP_LOCATION = `file://${path.join(__dirname, '../build/index.html')}`
 const FILE_SERVER_PORT = "8080";
@@ -287,7 +289,27 @@ ipcMain.handle('getBotRunning', () => {
     return botRunning;
 });
 
+ipcMain.handle('migrate', async (event, migrationKey) => {
+    if (fs.existsSync(MIGRATION_FILE)) {
+        console.log("MIGRATION FILE EXISTS");
+        let migrationJSON = fs.readFileSync(MIGRATION_FILE);
+        let migrationData = JSON.parse(migrationJSON);
+        
+        config = await migrateConfig(migrationData);
+        fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 5));
+        
+        return;
+    }
+    let res = await axios.get(`https://deusprogrammer.com/api/streamcrabs/migrations/${migrationKey}`);
+    fs.writeFileSync(MIGRATION_FILE, Buffer.from(JSON.stringify(res.data, null, 5)));
+    
+    config = await migrateConfig(res.data);
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 5));
+
+    return;
+});
+
 ipcMain.on('updateGauges', (event, gauges) => {
     config.gauges = gauges;
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
-})
+});

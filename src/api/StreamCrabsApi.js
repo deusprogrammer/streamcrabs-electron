@@ -90,3 +90,7 @@ export const getChannelPointRewards = async (botConfig) => {
 
     return rewards;
 }
+
+export const migrate = async (key) => {
+    await window.api.send("migrate", key); 
+}
