@@ -2,24 +2,65 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 
-const { app, ipcMain, shell, protocol, BrowserWindow } = require('electron');
+const { app, ipcMain, protocol, BrowserWindow } = require('electron');
 const electronOauth2 = require('electron-oauth2');
 
 const { runImageServer } = require('./fileServer');
 const { startBot, stopBot } = require('./bot/bot');
 const { migrateConfig } = require('./migration');
 
-const CONFIG_FILE = path.join(__dirname, "config.json");
-const MIGRATION_FILE = path.join(__dirname, "migration.json");
-const USER_DATA_FILE = path.join(__dirname, "config.json");
+const HOME =
+    process.platform === 'darwin'
+        ? `${process.env.HOME}/.streamcrabs` || '/'
+        : `${process.env.HOMEDRIVE}${process.env.HOMEPATH}/AppData/Local/streamcrabs`;
+const MEDIA_DIRECTORY = path.join(HOME, "media");
+const CONFIG_FILE = path.join(HOME, "config.json");
+const MIGRATION_FILE = path.join(HOME, "migration.json");
+const USER_DATA_FILE = path.join(HOME, "config.json");
 const REACT_APP_LOCATION = `file://${path.join(__dirname, '../build/index.html')}`
-const FILE_SERVER_PORT = "8080";
+const DEFAULT_FILE_SERVER_PORT = "8080";
+
+console.log("HOME:        " + HOME);
+console.log("CONFIG FILE: " + CONFIG_FILE);
 
 let isDev = false;
 try {
     isDev = require('electron-is-dev');
 } catch (e) {
     console.log("Running in production mode using react app at: " + REACT_APP_LOCATION);
+}
+
+if (!fs.existsSync(HOME)) {
+    fs.mkdirSync(HOME, {recursive: true});
+}
+
+if (!fs.existsSync(MEDIA_DIRECTORY)) {
+    fs.mkdirSync(MEDIA_DIRECTORY, {recursive: true});
+}
+
+if (!fs.existsSync(CONFIG_FILE)) {
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify({
+        "videoPool": [],
+        "audioPool": [],
+        "imagePool": [],
+        "dynamicAlerts": [],
+        "alertConfigs": {
+             "raidAlert": {},
+             "subAlert": {},
+             "cheerAlert": {},
+             "followAlert": {}
+        },
+        "redemptions": {},
+        "gauges": {},
+        "commands": {},
+        "clientId": "",
+        "clientSecret": "",
+        "twitchChannel": "",
+        "broadcasterId": "",
+        "profileImage": "",
+        "accessToken": "",
+        "refreshToken": ""
+   }));
 }
 
 let config = JSON.parse(fs.readFileSync(CONFIG_FILE).toString());
@@ -29,6 +70,12 @@ let uiLocked = false;
 
 const uuidv4 = () => {
     return Date.now().toString();
+}
+
+if (!config.clientId || !config.clientSecret) {
+    config.clientId = process.env.TWITCH_CLIENT_ID;
+    config.clientSecret = process.env.TWITCH_CLIENT_SECRET;
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config));
 }
 
 const oauthConfig = {
@@ -78,7 +125,7 @@ const createWindow = async () => {
 
     protocol.interceptFileProtocol('app', function (request, callback) {
         let url = request.url.substr(6);
-        let dir = path.normalize(path.join(__dirname, '.', url));
+        let dir = path.normalize(path.join(HOME, url));
         console.log("FILE: " + url);
         console.log("PATH: " + dir);
         callback(dir);
@@ -97,8 +144,10 @@ const createWindow = async () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-    runImageServer(FILE_SERVER_PORT);
+app.whenReady().then(async () => {
+    let port = await runImageServer(HOME, DEFAULT_FILE_SERVER_PORT);
+    config.imageServerPort = port;
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 5));
     createWindow();
 });
 
@@ -169,10 +218,12 @@ ipcMain.handle('getUiLock', () => {
 });
 
 ipcMain.handle('startBot', (event) => {
+    botRunning = true;
     startBot(config);
 });
 
 ipcMain.handle('stopBot', () => {
+    botRunning = false;
     stopBot();
 });
 
@@ -304,7 +355,7 @@ ipcMain.handle('migrate', async (event, migrationKey) => {
         let migrationJSON = fs.readFileSync(MIGRATION_FILE);
         let migrationData = JSON.parse(migrationJSON);
         
-        config = await migrateConfig(migrationData);
+        config = await migrateConfig(migrationData, HOME);
         fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 5));
         
         return;
@@ -312,7 +363,7 @@ ipcMain.handle('migrate', async (event, migrationKey) => {
     let res = await axios.get(`https://deusprogrammer.com/api/streamcrabs/migrations/${migrationKey}`);
     fs.writeFileSync(MIGRATION_FILE, Buffer.from(JSON.stringify(res.data, null, 5)));
     
-    config = await migrateConfig(res.data);
+    config = await migrateConfig(res.data, HOME);
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 5));
 
     return;

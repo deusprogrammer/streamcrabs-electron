@@ -14,6 +14,8 @@ const updateGauge = (gauges) => {
 }
 
 const performAction = async (type, id, soundId, subPanel, message, botContext) => {
+    let port = botContext.botConfig.imageServerPort;
+
     if (type === "VIDEO") {
         let video;
         if (id === null) {
@@ -27,6 +29,8 @@ const performAction = async (type, id, soundId, subPanel, message, botContext) =
         }
 
         let {url, volume, chromaKey} = video;
+
+        url = url.replace("app://", `/`);
 
         if (!volume) {
             volume = 1.0;
@@ -52,6 +56,8 @@ const performAction = async (type, id, soundId, subPanel, message, botContext) =
         }
 
         let {url, volume} = audio;
+
+        url = url.replace("app://", `/`);
 
         if (!volume) {
             volume = 1.0;
@@ -85,6 +91,9 @@ const performAction = async (type, id, soundId, subPanel, message, botContext) =
 
         let {url} = image;
         let {url: soundUrl, volume: soundVolume} = audio;
+
+        url = url.replace("app://", `/`);
+        soundUrl = soundUrl.replace("app://", `/`);
 
         if (!soundVolume) {
             soundVolume = 1.0;

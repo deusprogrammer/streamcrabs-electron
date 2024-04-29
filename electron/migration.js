@@ -27,9 +27,9 @@ const reorderObjectKeys = (object, order) => {
     return reorderedObject;
 }
 
-module.exports.migrateConfig = async (config) => {
-    const DOWNLOAD_DIRECTORY = path.join(__dirname, "media");
-    const CONFIG_FILE = path.join(__dirname, "config.json");
+module.exports.migrateConfig = async (migratedConfig, homeDirectory) => {
+    const DOWNLOAD_DIRECTORY = path.join(homeDirectory, "media");
+    const CONFIG_FILE = path.join(homeDirectory, "config.json");
     const ORDER = [
         "videoPool",
         "audioPool",
@@ -51,7 +51,7 @@ module.exports.migrateConfig = async (config) => {
     let localConfigObject = JSON.parse(fs.readFileSync(CONFIG_FILE).toString());
 
     // Insert video clips
-    for (let asset of config.videoPool) {
+    for (let asset of migratedConfig.videoPool) {
         let url = await downloadFile({...asset, extension: 'mp4'}, DOWNLOAD_DIRECTORY);
 
         let newAsset = {
@@ -67,7 +67,7 @@ module.exports.migrateConfig = async (config) => {
     }
 
     // Insert audio clips
-    for (let asset of config.audioPool) {
+    for (let asset of migratedConfig.audioPool) {
         let url = await downloadFile({...asset, extension: 'mp3'}, DOWNLOAD_DIRECTORY);
 
         let newAsset = {
@@ -83,7 +83,7 @@ module.exports.migrateConfig = async (config) => {
     }
 
     // Insert images
-    for (let asset of config.imagePool) {
+    for (let asset of migratedConfig.imagePool) {
         let url = await downloadFile({...asset, extension: 'gif'}, DOWNLOAD_DIRECTORY);
 
         let newAsset = {
@@ -99,7 +99,7 @@ module.exports.migrateConfig = async (config) => {
     }
 
     // Insert dynamic alerts
-    for (let dynamicAlert of config.dynamicAlerts) {
+    for (let dynamicAlert of migratedConfig.dynamicAlerts) {
         let newDynamicAlert = {...dynamicAlert, id: dynamicAlert._id, sprites: []};
         delete newDynamicAlert._id;
         for (let sprite of dynamicAlert.sprites) {
@@ -138,22 +138,22 @@ module.exports.migrateConfig = async (config) => {
     }
 
     // Update alerts
-    for (let key in config.alertConfigs) {
+    for (let key in migratedConfig.alertConfigs) {
         if (!localConfigObject.alertConfigs) {
             localConfigObject.alertConfigs = {};
         }
 
-        localConfigObject.alertConfigs[key] = config.alertConfigs[key];
+        localConfigObject.alertConfigs[key] = migratedConfig.alertConfigs[key];
         delete localConfigObject.alertConfigs[key]._id;
     }
 
     // Update gauges
-    for (let key in config.gauges) {
+    for (let key in migratedConfig.gauges) {
         if (!localConfigObject.gauges) {
             localConfigObject.gauges = {};
         }
 
-        localConfigObject.gauges[key] = {...config.gauges[key]};
+        localConfigObject.gauges[key] = {...migratedConfig.gauges[key]};
         delete localConfigObject.gauges[key]._id;
     }
 
