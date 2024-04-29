@@ -498,7 +498,8 @@ export default class MediaPoolConfig extends React.Component {
                                         <img 
                                             id="img-preview"
                                             src={createAbsoluteUrl(element.url)} 
-                                            width="300px" />
+                                            width="300px"
+                                            alt="alert" />
                                     </div>
                                     <label>Name</label>
                                     <input type="text" value={element.name} onChange={(e) => {this.updateMedia(e, index, "image")}} disabled={this.state.saving} />

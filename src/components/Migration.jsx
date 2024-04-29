@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { migrate } from '../api/StreamCrabsApi';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 const Migration = () => {
     const [migrationKey, setMigrationKey] = useState("");
     const [migrating, setMigrating] = useState(false);
+    const navigate = useNavigate();
 
     const importConfig = async () => {
         toast.info("Migrating data...");
@@ -12,6 +14,7 @@ const Migration = () => {
         await migrate(migrationKey);
         setMigrating(false);
         toast.info("Migration complete");
+        navigate("/");
     }
 
     return (

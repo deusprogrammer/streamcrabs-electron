@@ -17,6 +17,7 @@ import CommandConfig from './components/CommandConfig';
 import Menu from './elements/Menu';
 import Gauges from './components/Gauges';
 import Migration from './components/Migration';
+import { checkMigration, getBotConfig, login } from './api/StreamCrabsApi';
 
 const EXAMPLE = `{
     ...
@@ -30,9 +31,13 @@ const App = () => {
     const [twitchChannel, setTwitchChannel] = useState();
     const [clientId, setClientId] = useState(null);
     const [clientSecret, setClientSecret] = useState(null);
+    const [alreadyMigrated, setAlreadyMigrated] = useState(true);
+
     useEffect(() => {
         (async () => {
-            let {accessToken, refreshToken, profileImage, twitchChannel, clientId, clientSecret} = await window.api.send("getBotConfig");
+            let {accessToken, refreshToken, profileImage, twitchChannel, clientId, clientSecret} = await getBotConfig();
+            let alreadyMigrated = await checkMigration();
+            setAlreadyMigrated(alreadyMigrated);
             setLoggedIn(accessToken && refreshToken);
             setTwitchChannel(twitchChannel);
             setProfileImage(profileImage);
@@ -42,8 +47,10 @@ const App = () => {
     }, []);
 
     const onLogin = async () => {
-        if (await window.api.send('login')) {
-            let {accessToken, refreshToken, profileImage, twitchChannel} = await window.api.send('getBotConfig');
+        if (await login()) {
+            let {accessToken, refreshToken, profileImage, twitchChannel} = await getBotConfig();
+            let alreadyMigrated = await checkMigration();
+            setAlreadyMigrated(alreadyMigrated);
             setLoggedIn(accessToken && refreshToken);
             setTwitchChannel(twitchChannel);
             setProfileImage(profileImage);
@@ -52,7 +59,7 @@ const App = () => {
 
     if (!clientId || !clientSecret) {
         return (<div className="splash-screen">
-            <img className="streamcrab-logo" src={`${process.env.PUBLIC_URL}/crab.png`} /><br />
+            <img className="streamcrab-logo" src={`${process.env.PUBLIC_URL}/crab.png`} alt="Streamcrabs logo" /><br />
             <h3>No client id or secret found!</h3>
             <p>If you built this project from Git Hub, please add your Twitch client id and client secret into the config.js like below and then restart the app.</p>
             <pre style={{display: "inline-block", background: "gray", padding: "5px", textAlign: "left"}}>{EXAMPLE}</pre>
@@ -62,7 +69,9 @@ const App = () => {
     if (!loggedIn) {
         return (
             <div className="splash-screen">
-                <img className="streamcrab-logo" src={`${process.env.PUBLIC_URL}/crab.png`} /><br />
+                <h1>Welcome to Streamcrabs Pocket</h1>
+                <p>If you are ready to unleash the Streamcrabs, just login to Twitch below.</p>
+                <img className="streamcrab-logo" src={`${process.env.PUBLIC_URL}/crab.png`} alt="Streamcrabs logo" /><br />
                 <button onClick={() => onLogin()}>Twitch Login</button>
             </div>
         );
@@ -100,7 +109,8 @@ const App = () => {
                             to: `/configs/gauges`
                         }, {
                             label: "Migration",
-                            to: `/migrations`
+                            to: `/migrations`,
+                            show: !alreadyMigrated
                         }
                     ],
                     show: true
@@ -116,7 +126,7 @@ const App = () => {
                     {menu}
                 </div>
                 <div className="profile-image">
-                    <img src={profileImage} /><br/>
+                    <img src={profileImage} alt="Twitch profile avatar" /><br/>
                     {twitchChannel}
                 </div>
                 <Routes>

@@ -1,5 +1,9 @@
 import axios from "axios";
 
+export const login = async () => {
+    return await window.api.send('login');
+}
+
 export const getBotConfig = async () => {
     return await window.api.send("getBotConfig");
 }
@@ -97,4 +101,12 @@ export const getChannelPointRewards = async (botConfig) => {
 
 export const migrate = async (key) => {
     await window.api.send("migrate", key); 
+}
+
+export const checkMigration = async () => {
+    return await window.api.send("checkMigration"); 
+}
+
+export const fireOverlayEvent = async (type, eventData) => {
+    return await window.api.send("fireOverlayEvent", {type, eventData});
 }

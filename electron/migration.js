@@ -40,6 +40,7 @@ module.exports.migrateConfig = async (migratedConfig, homeDirectory) => {
         "gauges",
         "commands",
         "config",
+        "imageServerPort",
         "clientId",
         "clientSecret",
         "twitchChannel",
@@ -155,6 +156,26 @@ module.exports.migrateConfig = async (migratedConfig, homeDirectory) => {
 
         localConfigObject.gauges[key] = {...migratedConfig.gauges[key]};
         delete localConfigObject.gauges[key]._id;
+    }
+
+    // Copy over redemptions
+    for (let key in migratedConfig.redemptions) {
+        if (!localConfigObject.redemptions) {
+            localConfigObject.redemptions = {};
+        }
+
+        localConfigObject.redemptions[key] = {...migratedConfig.redemptions[key]};
+        delete localConfigObject.redemptions[key]._id;
+    }
+
+    // Copy over commands
+    for (let key in migratedConfig.commands) {
+        if (!localConfigObject.commands) {
+            localConfigObject.commands = {};
+        }
+
+        localConfigObject.commands[key] = {...migratedConfig.commands[key]};
+        delete localConfigObject.commands[key]._id;
     }
 
     return reorderObjectKeys(localConfigObject, ORDER);

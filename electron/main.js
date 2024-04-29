@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 
+const eventQueue = require('./bot/components/base/eventQueue');
+
 const { app, ipcMain, protocol, BrowserWindow } = require('electron');
 const electronOauth2 = require('electron-oauth2');
 
@@ -349,6 +351,10 @@ ipcMain.handle('getBotRunning', () => {
     return botRunning;
 });
 
+ipcMain.handle('checkMigration', async () => {
+    return fs.existsSync(MIGRATION_FILE);
+});
+
 ipcMain.handle('migrate', async (event, migrationKey) => {
     if (fs.existsSync(MIGRATION_FILE)) {
         console.log("MIGRATION FILE EXISTS");
@@ -367,6 +373,10 @@ ipcMain.handle('migrate', async (event, migrationKey) => {
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 5));
 
     return;
+});
+
+ipcMain.handle('fireOverlayEvent', (event, {type, eventData}) => {
+    eventQueue.sendEventToOverlays(type, eventData);
 });
 
 ipcMain.on('updateGauges', (event, gauges) => {

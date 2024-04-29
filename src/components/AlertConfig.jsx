@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import {toast} from 'react-toastify';
 import { getBotConfig, getDynamicAlerts, updateAlerts } from '../api/StreamCrabsApi';
+import Preview from '../elements/Preview';
 
 const AlertConfigElement = (props) => {
     let mediaSelector = null;
@@ -184,57 +185,77 @@ const AlertConfig = (props) => {
             <div>
                 <h1>Alert Config</h1>
                 <h3>Cheer Alert</h3>
-                <AlertConfigElement 
-                    type="cheer"
-                    alertConfig={botConfig.alertConfigs.cheerAlert}
-                    botConfig={botConfig}
-                    dynamicAlerts={dynamicAlerts}
-                    disabled={saving}
-                    onChange={
-                        async (config) => {
-                            let updatedAlertConfig = {...botConfig.alertConfigs, cheerAlert: config};
-                            setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
-                        }
-                    } />
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <AlertConfigElement
+                        type="cheer"
+                        alertConfig={botConfig.alertConfigs.cheerAlert}
+                        botConfig={botConfig}
+                        dynamicAlerts={dynamicAlerts}
+                        disabled={saving}
+                        onChange={
+                            async (config) => {
+                                let updatedAlertConfig = {...botConfig.alertConfigs, cheerAlert: config};
+                                setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
+                            }
+                        } />
+                    <Preview
+                        botConfig={botConfig}
+                        alert={botConfig.alertConfigs.cheerAlert} />
+                </div>
                 <h3>Subscription Alert</h3>
-                <AlertConfigElement 
-                    type="subscription"
-                    alertConfig={botConfig.alertConfigs.subAlert}
-                    botConfig={botConfig}
-                    dynamicAlerts={dynamicAlerts}
-                    disabled={saving}
-                    onChange={
-                        async (config) => {
-                            let updatedAlertConfig = {...botConfig.alertConfigs, subAlert: config};
-                            setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
-                        }
-                    } />
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <AlertConfigElement
+                        type="subscription"
+                        alertConfig={botConfig.alertConfigs.subAlert}
+                        botConfig={botConfig}
+                        dynamicAlerts={dynamicAlerts}
+                        disabled={saving}
+                        onChange={
+                            async (config) => {
+                                let updatedAlertConfig = {...botConfig.alertConfigs, subAlert: config};
+                                setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
+                            }
+                        } />
+                    <Preview
+                        botConfig={botConfig}
+                        alert={botConfig.alertConfigs.subAlert} />
+                </div>
                 <h3>Follow Alert</h3>
-                <AlertConfigElement 
-                    type="follow"
-                    alertConfig={botConfig.alertConfigs.followAlert}
-                    botConfig={botConfig}
-                    dynamicAlerts={dynamicAlerts}
-                    disabled={saving}
-                    onChange={
-                        async (config) => {
-                            let updatedAlertConfig = {...botConfig.alertConfigs, followAlert: config};
-                            setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
-                        }
-                    } />
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <AlertConfigElement
+                        type="follow"
+                        alertConfig={botConfig.alertConfigs.followAlert}
+                        botConfig={botConfig}
+                        dynamicAlerts={dynamicAlerts}
+                        disabled={saving}
+                        onChange={
+                            async (config) => {
+                                let updatedAlertConfig = {...botConfig.alertConfigs, followAlert: config};
+                                setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
+                            }
+                        } />
+                    <Preview
+                        botConfig={botConfig}
+                        alert={botConfig.alertConfigs.followAlert} />
+                </div>
                 <h3>Raid Alert</h3>
-                <AlertConfigElement 
-                    type="raid"
-                    alertConfig={botConfig.alertConfigs.raidAlert}
-                    botConfig={botConfig}
-                    dynamicAlerts={dynamicAlerts}
-                    disabled={saving}
-                    onChange={
-                        async (config) => {
-                            let updatedAlertConfig = {...botConfig.alertConfigs, raidAlert: config};
-                            setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
-                        }
-                    } />
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <AlertConfigElement 
+                        type="raid"
+                        alertConfig={botConfig.alertConfigs.raidAlert}
+                        botConfig={botConfig}
+                        dynamicAlerts={dynamicAlerts}
+                        disabled={saving}
+                        onChange={
+                            async (config) => {
+                                let updatedAlertConfig = {...botConfig.alertConfigs, raidAlert: config};
+                                setBotConfig({...botConfig, alertConfigs: updatedAlertConfig});
+                            }
+                        } />
+                    <Preview
+                        botConfig={botConfig}
+                        alert={botConfig.alertConfigs.raidAlert} />
+                </div>
                 <button className="primary" onClick={async () => {
                     setSaving(true);
                     await updateAlerts(botConfig.alertConfigs);

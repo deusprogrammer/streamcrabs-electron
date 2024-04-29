@@ -35,7 +35,9 @@ contextBridge.exposeInMainWorld(
                 "removeCommand",
                 "updateRedemptions",
                 "updateGauges",
-                "migrate"
+                "checkMigration",
+                "migrate",
+                "fireOverlayEvent"
             ];
             if (validChannels.includes(channel)) {
                 return await ipcRenderer.invoke(channel, args);

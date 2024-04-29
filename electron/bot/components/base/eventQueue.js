@@ -82,7 +82,7 @@ const sendErrorToChat = async(message) => {
 }
 
 const sendEventToOverlays = (type, eventData) => {
-    const targets = ["panel"]
+    const targets = ["panel"];
 
     if (!eventData.results) {
         eventData.results = {};

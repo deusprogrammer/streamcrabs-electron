@@ -27,7 +27,7 @@ const Menu = ({title, menu, className}) => {
                             <div className="menu-group" key={`group${i}`}>
                                 <h2>{menuGroup}</h2>
                                 <ul>    
-                                    {items.map(({to, label}, j) => {
+                                    {items.filter(({show}) => show === undefined || show === true).map(({to, label}, j) => {
                                         return <li key={`group${i}item${j}`}><Link to={to}>{label}</Link></li>;
                                     })}
                                 </ul>
