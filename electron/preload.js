@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld(
                 "removeRaidAlert",
                 "updateVideoPool",
                 "updateAudioPool",
+                "updateImagePool",
                 "getUserData",
                 "updateUserData",
                 "updateAlerts",

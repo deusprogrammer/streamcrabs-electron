@@ -191,7 +191,7 @@ ipcMain.handle('storeMedia', (event, {imagePayload, extension}) => {
     let filename = Date.now() + extension;
     let filePath = path.normalize(`${__dirname}/media/${filename}`);
     fs.writeFileSync(filePath, buffer);
-    return `/media/${filename}`;
+    return `app://media/${filename}`;
 });
 
 ipcMain.handle('updateEnableList', (event, enabled) => {
@@ -237,6 +237,15 @@ ipcMain.handle('updateAudioPool', (event, audioPool) => {
         config.audioPool = [];
     }
     config.audioPool = audioPool;
+    fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
+    return;
+});
+
+ipcMain.handle('updateImagePool', (event, imagePool) => {
+    if (!config.imagePool) {
+        config.imagePool = [];
+    }
+    config.imagePool = imagePool;
     fs.writeFileSync(CONFIG_FILE, Buffer.from(JSON.stringify(config, null, 5)));
     return;
 });

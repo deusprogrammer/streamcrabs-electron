@@ -1,6 +1,6 @@
 import React from 'react';
 import {toast} from 'react-toastify';
-import { getBotConfig, updateAudioPool, updateVideoPool, storeMedia } from '../api/StreamCrabsApi';
+import { getBotConfig, updateAudioPool, updateVideoPool, updateImagePool, storeMediaData } from '../api/StreamCrabsApi';
 import { createAbsoluteUrl } from '../utils/UrlUtil';
 
 export default class MediaPoolConfig extends React.Component {
@@ -93,9 +93,11 @@ export default class MediaPoolConfig extends React.Component {
                 this.setState({audioPool: mediaPool, saving: true});
                 await updateAudioPool(mediaPool);
             } else if (type === "video") {
+                this.setState({videoPool: mediaPool, saving: true});
                 await updateVideoPool(mediaPool);
             } else if (type === "image") {
-                // Unimplemented
+                this.setState({imagePool: mediaPool, saving: true});
+                await updateImagePool(mediaPool);
             }  else {
                 return;
             }
@@ -130,8 +132,8 @@ export default class MediaPoolConfig extends React.Component {
                 this.setState({videoPool: mediaPool, saving: true});
                 await updateVideoPool(mediaPool);
             } else if (type === "image") {
-                // this.setState({imagePool: mediaPool, saving: true});
-                // await ApiHelper.updateBotMediaPool(this.props.channel, "image", mediaPool);
+                this.setState({imagePool: mediaPool, saving: true});
+                await updateImagePool(mediaPool);
             }  else {
                 return;
             }
@@ -176,8 +178,11 @@ export default class MediaPoolConfig extends React.Component {
         this.setState({saving: true});
         if (!this.state.addAudioUrl && !this.state.addVideoUrl && !this.state.addImageUrl) {
             try {
-                let url = await storeMedia(mediaData);
+                let url = await storeMediaData(mediaData);
                 mediaPool.push({
+                    id: `${Date.now()}`,
+                    enabled: false,
+                    volume: 1,
                     name: type + (mediaPool.length + 1),
                     url
                 });
@@ -188,6 +193,9 @@ export default class MediaPoolConfig extends React.Component {
             }
         } else {
             mediaPool.push({
+                id: `${Date.now()}`,
+                enabled: false,
+                volume: 1,
                 name: type + (mediaPool.length + 1),
                 url: mediaUrl
             });
@@ -200,6 +208,9 @@ export default class MediaPoolConfig extends React.Component {
                     break;
                 case "audio":
                     await updateAudioPool(mediaPool);
+                    break;
+                case "image":
+                    await updateImagePool(mediaPool);
                     break;
                 default:
                     console.log("Unimplemented");
@@ -356,6 +367,9 @@ export default class MediaPoolConfig extends React.Component {
                 case "audio":
                     await updateAudioPool(mediaPool);
                     break;
+                case "image":
+                    await updateImagePool(mediaPool);
+                    break;
                 default:
                     console.log("Unimplemented");
             }
@@ -474,7 +488,7 @@ export default class MediaPoolConfig extends React.Component {
                         </li>                      
                     </ul>
                 </div>
-                {/* <div id="image-pool" className="media-pool-div">
+                <div id="image-pool" className="media-pool-div">
                     <h3>My Animated Gifs</h3>
                     <ul>
                         { this.state.imagePool.map((element, index) => {
@@ -483,7 +497,7 @@ export default class MediaPoolConfig extends React.Component {
                                     <div className="video-preview">
                                         <img 
                                             id="img-preview"
-                                            src={element.url} 
+                                            src={createAbsoluteUrl(element.url)} 
                                             width="300px" />
                                     </div>
                                     <label>Name</label>
@@ -507,7 +521,7 @@ export default class MediaPoolConfig extends React.Component {
                             </div>
                         </li>
                     </ul>
-                </div> */}
+                </div>
             </div>
         )
     }

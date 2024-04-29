@@ -12,7 +12,11 @@ export const updateVideoPool = async (mediaPool) => {
     return await window.api.send("updateVideoPool", mediaPool);
 }
 
-export const storeMedia = async (mediaData) => {
+export const updateImagePool = async (mediaPool) => {
+    return await window.api.send("updateImagePool", mediaPool);
+}
+
+export const storeMediaData = async (mediaData) => {
     return await window.api.send("storeMedia", mediaData);
 }
 

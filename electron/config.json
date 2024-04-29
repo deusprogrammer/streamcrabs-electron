@@ -279,6 +279,12 @@
                "name": "Taco Bell LOL",
                "url": "app://media/645c034333ed7c0014eae833.mp4",
                "id": "645c034333ed7c0014eae833"
+          },
+          {
+               "id": "1714354663631",
+               "volume": 1,
+               "name": "Fuwawa Momoco",
+               "url": "app://media/1714354663620.mp4"
           }
      ],
      "audioPool": [
@@ -421,6 +427,12 @@
                "name": "Squishy Fart",
                "url": "app://media/61d7e7f5a6af250014d11d4f.mp3",
                "id": "61d7e7f5a6af250014d11d4f"
+          },
+          {
+               "id": "1714354638417",
+               "volume": 1,
+               "name": "Arby's in my Butthole",
+               "url": "app://media/1714354638402.mp3"
           }
      ],
      "imagePool": [
@@ -433,6 +445,13 @@
                "name": "Marina Dance",
                "url": "app://media/61dcbf77738de40014b01aab.gif",
                "id": "61dcbf77738de40014b01aab"
+          },
+          {
+               "id": "1714403728922",
+               "enabled": false,
+               "volume": 1,
+               "name": "Robin Dicks",
+               "url": "app://media/1714403728899.gif"
           }
      ],
      "dynamicAlerts": [
@@ -1053,6 +1072,6 @@
      "twitchChannel": "thetruekingofspace",
      "broadcasterId": "88666502",
      "profileImage": "https://static-cdn.jtvnw.net/jtv_user_pictures/7d4a88a0-259f-4829-ba51-b7f661aacab8-profile_image-300x300.png",
-     "accessToken": "ja0ogkgkyrhnk98p372psescqwajep",
+     "accessToken": "g0jjg6qycp5faikow1ogftjbby8wai",
      "refreshToken": "ckncxntjiwfkrqewb79vqimw8n8o5xsryjnxsfdy11tpjz49zo"
 }

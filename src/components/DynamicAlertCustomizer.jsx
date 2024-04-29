@@ -3,7 +3,7 @@ import Animation from '../elements/Animation';
 
 import SpriteStrip from '../elements/SpriteStrip';
 
-import { getDynamicAlert, storeDynamicAlert, storeMedia, updateDynamicAlert } from '../api/StreamCrabsApi';
+import { getDynamicAlert, storeDynamicAlert, storeMediaData, updateDynamicAlert } from '../api/StreamCrabsApi';
 import { useNavigate, useParams } from 'react-router';
 import { createAbsoluteUrl } from '../utils/UrlUtil';
 
@@ -85,7 +85,7 @@ const RaidAlertCustomizer = (props) => {
             title
         };
 
-        return await storeMedia(mediaData);
+        return await storeMediaData(mediaData);
     };
 
     const storeImage = async (imagePayload, title) => {
@@ -96,7 +96,7 @@ const RaidAlertCustomizer = (props) => {
             title
         };
 
-        return await storeMedia(mediaData);
+        return await storeMediaData(mediaData);
     };
 
     const store = async () => {
