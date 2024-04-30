@@ -127,6 +127,13 @@ const alert = async (message, alertType, {variable}, botContext) => {
         } else {
             theme = name;
         }
+
+        customTheme.sprites.forEach((sprite) => {
+            sprite.file = sprite.file.replace("app://", "/");
+        });
+
+        customTheme.music.file = customTheme.music.file.replace("app://", "/");
+        customTheme.leavingSound.file = customTheme.music.file.replace("app://", "/");
         
         EventQueue.sendEventToOverlays(type, {
             message,
