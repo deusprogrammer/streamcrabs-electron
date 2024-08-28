@@ -80,10 +80,13 @@ const performCustomCommand = (command, {type, coolDown, target}, botContext) => 
 }
 
 // Define configuration options for chat bot
-const startBot = async (botConfig) => {
+const startBot = async (botConfig, selectedBotUser) => {
     try {
-        let {accessToken, clientId, twitchChannel, devMode} = botConfig;
+        let {accessToken, clientId, twitchChannel, botUsers, devMode} = botConfig;
         let botContext = {};
+        let chatAccessToken = botUsers[selectedBotUser].accessToken;
+
+        console.log("STARTING BOT AS : " + selectedBotUser);
 
         let plugins = [deathCounterPlugin, requestPlugin, cameraObscura, modTools];
         
@@ -220,7 +223,8 @@ const startBot = async (botConfig) => {
         });
 
         const authProvider = new StaticAuthProvider(clientId, accessToken, ["chat:read", "chat:edit", "channel:read:redemptions", "channel:read:subscriptions", "bits:read", "channel_subscriptions"], "user");
-        client = new ChatClient({authProvider, channels: [twitchChannel]});
+        const chatAuthProvider = new StaticAuthProvider(clientId, chatAccessToken, ["chat:read", "chat:edit", "channel:read:redemptions", "channel:read:subscriptions", "bits:read", "channel_subscriptions"], "user");
+        client = new ChatClient({authProvider: chatAuthProvider, channels: [twitchChannel]});
         pubSubClient = new PubSubClient();
         const userId = await pubSubClient.registerUserListener(authProvider);
         
